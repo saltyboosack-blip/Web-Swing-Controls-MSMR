@@ -38,6 +38,33 @@ processes. The proxy update does not change game assets or swing physics.
 
 ## Installation
 
+### Optional Spider-Man PC Modding Tool add-on
+
+The GitHub v0.2.1 release also provides
+`Web_Swing_Controls_ModdingTool_Addon_v1.4.5.1.zip`. This is an unofficial
+GPL fork of Modding Tool 1.4.5 with a safe `Mod > Install MSMR .script...`
+command. It installs Web Swing Controls directly and does not require
+Overstrike or the PowerShell proxy updater.
+
+Use either this add-on or the Overstrike method below; do not have both
+managers rebuild the script files during the same installation. Full add-on
+source and tests are in [`ModdingToolAddon/`](ModdingToolAddon/).
+
+Add-on steps:
+
+1. Extract the add-on ZIP and run its `ModdingTool.exe`.
+2. Load the game's `asset_archive/toc`.
+3. Choose `Mod > Install MSMR .script...`.
+4. Select the included `Web_Swing_Controls_MSMR_v0.2.1-beta.script` and
+   confirm the preview.
+
+The add-on validates the exact supported game executable, refuses unknown
+`winmm.dll` loaders, preserves existing script settings, and backs up every
+replaced file. It never closes the game automatically. Like Modding Tool
+1.4.5, it requires the x64 .NET 7 Windows Desktop Runtime.
+
+### Overstrike method
+
 1. Download `Web_Swing_Controls_MSMR_v0.2.1-beta_FULL_INSTALL.zip` from the
    GitHub release or Nexus Mods and extract the entire archive. This is the
    complete mod; no earlier version or separate controller update is needed.
@@ -62,6 +89,8 @@ required for the left/right mouse mechanic itself.
 
 - `WebSwingControls/` - controls-only DLL and policy tests.
 - `ScriptsProxy/` - host-gated Overstrike 1.8.0 proxy source and tests.
+- `ModdingToolAddon/` - optional Modding Tool 1.4.5 script-installer fork,
+  transactional installer core, and disposable fixture tests.
 - `SOURCE-MANIFEST.json` - file hashes for the source release prepared for
   Nexus review.
 

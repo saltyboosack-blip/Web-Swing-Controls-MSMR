@@ -2,6 +2,11 @@
 
 ## 0.2.1-beta
 
+- Added an optional GitHub-only Modding Tool 1.4.5 add-on that installs the
+  `.script` package directly without Overstrike.
+- Added exact-build and proxy hash checks, safe archive parsing, preservation
+  of existing script configuration, verified backups, atomic writes, rollback,
+  and eight disposable installer test cases to that add-on.
 - Integrated the controller repair into the complete install package; no
   earlier version or separate update is required.
 - Added Sony SCE, Steam Input, XInput, and Windows.Gaming.Input controller
