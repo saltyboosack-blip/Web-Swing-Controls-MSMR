@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.24)
 
-project(WebSwingControls VERSION 0.2.0 LANGUAGES C CXX)
+project(WebSwingControls VERSION 0.2.1 LANGUAGES C CXX)
 
 if(NOT WIN32 OR NOT MSVC)
     message(FATAL_ERROR "Web Swing Controls requires Windows and MSVC.")
@@ -60,4 +60,3 @@ add_policy_test(WebSwingControlsPolicyTests tests/ControlsOnlyPolicyTests.cpp)
 add_policy_test(ControllerWebInputPolicyTests tests/ControllerWebInputPolicyTests.cpp)
 add_policy_test(ControllerSourceRouteTests tests/ControllerSourceRouteTests.cpp)
 add_policy_test(ManualWebPolicyTests tests/ManualWebPolicyTests.cpp)
-

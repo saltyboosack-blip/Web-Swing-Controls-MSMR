@@ -1,15 +1,15 @@
 {
   "schemaVersion": 1,
   "modPage": "https://www.nexusmods.com/marvelsspidermanremastered/mods/6306",
-  "version": "0.2.0-beta",
-  "workingZipSha256": "5E848088537A6AB66E349C50F82CC658B8D380ECB0C1BF7D45C178CCC232273A",
-  "controlsDllSha256": "61C2537DD141D803B177B2988119A284CCC8B30CCAA812947528F3E0B014A223",
+  "version": "0.2.1-beta",
+  "workingZipSha256": "C3110C70995EE132F644E7A2AF7BECD68B5CB4F578120B55A653065FA9BD37C4",
+  "controlsDllSha256": "1E0AC0AE9FA82B59F06B5CBCD2A915FECA8FAEEBD924A1306A5471810CE0EBC8",
   "proxyDllSha256": "FFB6AD902798D7DF87F6D3FDE3B5A4BAE1E9212A40971B346452A5064768E111",
   "files": [
     {
       "path": "README.md",
-      "sha256": "FEFA910675CDE2208160AE64DD0E56C7F0F433FA2C80A175EF4B8181D55D6139",
-      "bytes": 2902
+      "sha256": "2CC91FFF5CB2BA78D8D9A817E714CDECC3004735FFB1598707896EC398A73634",
+      "bytes": 4683
     },
     {
       "path": "ScriptsProxy\\build-host-gate-tests.cmd",
@@ -158,8 +158,8 @@
     },
     {
       "path": "WebSwingControls\\CMakeLists.txt",
-      "sha256": "0D714C608B943047DAEB666DA030CC2163EAC85269173D1FBCEEE13AEE5A4198",
-      "bytes": 1811
+      "sha256": "C42D99E7178772B41FDA7BBC9315E94ED82347543DE98F86FDCDBF3E54851A95",
+      "bytes": 1810
     },
     {
       "path": "WebSwingControls\\include\\trueswing\\Vec3.h",
@@ -177,19 +177,24 @@
       "bytes": 1987
     },
     {
+      "path": "WebSwingControls\\src\\ControllerTriggerBridge.h",
+      "sha256": "CFA4433C743CEE8C752B476E93AC1C5C63B82D1BEE38BC9297F1B5D55C057D1B",
+      "bytes": 945
+    },
+    {
       "path": "WebSwingControls\\src\\ControllerWebInputPolicy.h",
-      "sha256": "B1B3D9DEC7C9C616EB4C85216A4F3908BB098D3BD6F3D94A32137BEF97084744",
-      "bytes": 9658
+      "sha256": "0CB2EE07310003FB2C57421BBB473737BDAFD337DC62E0F717584342DDB822D1",
+      "bytes": 10113
     },
     {
       "path": "WebSwingControls\\src\\controls_dllmain.cpp",
-      "sha256": "AD08A3DE3DD98B5D1912828AB6976B28D293D19F442460092C23BF9C5D8BBDE2",
-      "bytes": 1801
+      "sha256": "5206498052B4A100EA97371CA4AD597A94E62F2CCE228650EA32BF0E2B3BCE70",
+      "bytes": 1821
     },
     {
       "path": "WebSwingControls\\src\\ControlsOnlyRuntime.cpp",
-      "sha256": "102020924EFA7603C48CC3A37B11ECF578B199312108893DBF7A66C85F56D589",
-      "bytes": 3881
+      "sha256": "7D0A20673014AE0ABA12EF92CE5E7F7A1C04D255CC07224C0F8115F51A352BBB",
+      "bytes": 3962
     },
     {
       "path": "WebSwingControls\\src\\ControlsOnlyRuntime.h",
@@ -218,8 +223,8 @@
     },
     {
       "path": "WebSwingControls\\src\\ManualWebRuntime.cpp",
-      "sha256": "8EC1BD8E97FF16882A17FFDCDDC77770274CD7A8CB0087CA172890708BCF2591",
-      "bytes": 86318
+      "sha256": "379F81805B2127E24EC865393C0AA9D53ECA8E2798D057564C033DAA2F2E6520",
+      "bytes": 88386
     },
     {
       "path": "WebSwingControls\\src\\ManualWebRuntime.h",
@@ -263,8 +268,8 @@
     },
     {
       "path": "WebSwingControls\\tests\\ControllerWebInputPolicyTests.cpp",
-      "sha256": "2F616D57E56198C6D64D8A6EBA940838B940C80A5100076455547B168BEDFAA9",
-      "bytes": 24524
+      "sha256": "01589F2CEFE4D4D10B76723163DE0148E9EC8598FEE77EA78D4F8A07F7DF0947",
+      "bytes": 28175
     },
     {
       "path": "WebSwingControls\\tests\\ControlsOnlyPolicyTests.cpp",

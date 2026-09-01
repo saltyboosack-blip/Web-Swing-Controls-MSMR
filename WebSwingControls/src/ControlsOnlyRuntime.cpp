@@ -103,7 +103,7 @@ void LogHookFailure(const char* stage, void* target,
 
     SetManualWebRuntimeReady(true);
     Logger::Write(
-        "WebSwingControls active: airborne LMB/RMB select character-left/right; airborne L1+L2/R2 select character-left/right through the game-selected controller; vanilla Swing owns movement, velocity, collision, and release.");
+        "WebSwingControls active: airborne LMB/RMB select character-left/right; airborne L1/LB reserves both triggers, with L2/LT selecting character-left and R2/RT selecting character-right through normalized native controller Swing; vanilla movement, velocity, collision, and release remain authoritative.");
     return true;
 }
 

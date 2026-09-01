@@ -25,8 +25,11 @@ struct ControllerWebInputSample final {
 };
 
 struct ControllerWebInputDecision final {
-    // The adapter should neutralize only these trigger axes in the copy sent
-    // to the game. All other controller state remains native and unchanged.
+    // While layerActive, both trigger axes belong to the mod. The adapter
+    // neutralizes them in the game-facing device state, then drives only the
+    // game's normalized native Swing trigger. Outside the layer, unowned axes
+    // remain native and unchanged.
+    bool layerActive{};
     bool consumeLeftTrigger{};
     bool consumeRightTrigger{};
     bool leftAttach{};
@@ -98,6 +101,13 @@ public:
         const bool gate = sample.runtimeReady && sample.airborneProven &&
                           sample.leftShoulderHeld &&
                           sample.nativeSwingAvailable;
+        decision.layerActive = gate;
+        if (gate) {
+            // L1/LB is a true input layer: neither physical trigger may leak
+            // into its ordinary action while the airborne layer is active.
+            decision.consumeLeftTrigger = true;
+            decision.consumeRightTrigger = true;
+        }
         if (owner_ != ControllerWebOwner::None && !gate) {
             CancelOwner(decision);
         }

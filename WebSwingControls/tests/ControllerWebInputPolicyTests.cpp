@@ -1,4 +1,5 @@
 #include "ControllerWebInputPolicy.h"
+#include "ControllerTriggerBridge.h"
 
 #include <array>
 #include <cmath>
@@ -16,6 +17,7 @@ using trueswing::rebuild::runtime::ControllerWebInputDecision;
 using trueswing::rebuild::runtime::ControllerWebInputPolicy;
 using trueswing::rebuild::runtime::ControllerWebInputSample;
 using trueswing::rebuild::runtime::ControllerWebOwner;
+using trueswing::rebuild::runtime::ResolveControllerTriggerBridge;
 
 class TestFailure final : public std::exception {
 public:
@@ -69,7 +71,8 @@ void TestSchmittThresholdsAndJitter() {
     ControllerWebInputSample sample = Eligible();
     sample.leftTrigger = 0.499;
     auto decision = policy.Update(sample);
-    Require(!decision.consumeLeftTrigger && !decision.leftAttach,
+    Require(decision.layerActive && decision.consumeLeftTrigger &&
+                decision.consumeRightTrigger && !decision.leftAttach,
             "value below press threshold attached");
 
     sample.leftTrigger = 0.500;
@@ -82,6 +85,7 @@ void TestSchmittThresholdsAndJitter() {
         sample.leftTrigger = value;
         decision = policy.Update(sample);
         Require(decision.consumeLeftTrigger &&
+                    decision.consumeRightTrigger &&
                     !HasOwnershipEffect(decision),
                 "hysteresis-band jitter changed held ownership");
     }
@@ -94,7 +98,8 @@ void TestSchmittThresholdsAndJitter() {
 
     sample.leftTrigger = 0.499;
     decision = policy.Update(sample);
-    Require(!decision.consumeLeftTrigger && !decision.leftAttach,
+    Require(decision.consumeLeftTrigger && decision.consumeRightTrigger &&
+                !decision.leftAttach,
             "released trigger reattached inside hysteresis band");
 
     sample.leftTrigger = 2.0;
@@ -108,7 +113,8 @@ void TestFreshEdgeRequiredAfterStartupAndGateEntry() {
     ControllerWebInputSample sample = Eligible();
     sample.leftTrigger = 1.0;
     auto decision = startupPolicy.Update(sample);
-    Require(!decision.consumeLeftTrigger && !decision.leftAttach,
+    Require(decision.layerActive && decision.consumeLeftTrigger &&
+                decision.consumeRightTrigger && !decision.leftAttach,
             "startup-held trigger was captured");
     sample.leftTrigger = 0.0;
     (void)startupPolicy.Update(sample);
@@ -127,7 +133,8 @@ void TestFreshEdgeRequiredAfterStartupAndGateEntry() {
             "non-gated trigger press was captured");
     sample.leftShoulderHeld = true;
     decision = gatePolicy.Update(sample);
-    Require(!decision.consumeLeftTrigger && !decision.leftAttach,
+    Require(decision.layerActive && decision.consumeLeftTrigger &&
+                decision.consumeRightTrigger && !decision.leftAttach,
             "L1 gate stole a trigger already held");
     sample.leftTrigger = 0.0;
     (void)gatePolicy.Update(sample);
@@ -143,7 +150,7 @@ void TestExactLeftAndRightMapping() {
     ControllerWebInputSample sample = Eligible();
     sample.leftTrigger = 0.5;
     auto decision = leftPolicy.Update(sample);
-    Require(decision.consumeLeftTrigger && !decision.consumeRightTrigger &&
+    Require(decision.consumeLeftTrigger && decision.consumeRightTrigger &&
                 decision.leftAttach && !decision.rightAttach &&
                 decision.nativeSwingPress &&
                 leftPolicy.CurrentOwner() == ControllerWebOwner::Left,
@@ -159,7 +166,7 @@ void TestExactLeftAndRightMapping() {
     sample = Eligible();
     sample.rightTrigger = 0.5;
     decision = rightPolicy.Update(sample);
-    Require(!decision.consumeLeftTrigger && decision.consumeRightTrigger &&
+    Require(decision.consumeLeftTrigger && decision.consumeRightTrigger &&
                 !decision.leftAttach && decision.rightAttach &&
                 decision.nativeSwingPress &&
                 rightPolicy.CurrentOwner() == ControllerWebOwner::Right,
@@ -201,6 +208,71 @@ void TestGroundAndNonGatedInputRemainVanilla() {
                     !HasOwnershipEffect(decision),
                 "non-gated controller triggers were not vanilla");
     }
+}
+
+void TestAirborneShoulderLayerAlwaysReservesBothTriggers() {
+    ControllerWebInputPolicy policy;
+    ControllerWebInputSample sample = Eligible();
+    auto decision = policy.Update(sample);
+    Require(decision.layerActive && decision.consumeLeftTrigger &&
+                decision.consumeRightTrigger &&
+                !HasOwnershipEffect(decision),
+            "neutral airborne L1 layer did not reserve both triggers");
+
+    sample.leftTrigger = 0.2;
+    sample.rightTrigger = 0.3;
+    decision = policy.Update(sample);
+    Require(decision.layerActive && decision.consumeLeftTrigger &&
+                decision.consumeRightTrigger &&
+                !HasOwnershipEffect(decision),
+            "sub-threshold layer input leaked a native trigger");
+
+    sample.airborneProven = false;
+    decision = policy.Update(sample);
+    Require(!decision.layerActive && !decision.consumeLeftTrigger &&
+                !decision.consumeRightTrigger &&
+                !HasOwnershipEffect(decision),
+            "grounded shoulder layer consumed unowned triggers");
+}
+
+void TestNormalizedNativeTriggerBridge() {
+    ControllerWebInputPolicy policy;
+    ControllerWebInputSample sample = Eligible();
+    auto decision = policy.Update(sample);
+    auto bridge = ResolveControllerTriggerBridge(
+        decision, policy.NativeSwingHeld());
+    Require(bridge.writeLeftTrigger && bridge.writeRightTrigger &&
+                bridge.leftTrigger == 0.0F &&
+                bridge.rightTrigger == 0.0F,
+            "neutral L1 layer did not suppress both native triggers");
+
+    sample.leftTrigger = 0.7;
+    decision = policy.Update(sample);
+    bridge = ResolveControllerTriggerBridge(
+        decision, policy.NativeSwingHeld());
+    Require(decision.leftAttach && bridge.writeLeftTrigger &&
+                bridge.writeRightTrigger &&
+                bridge.leftTrigger == 0.0F &&
+                bridge.rightTrigger == 1.0F,
+            "L2 owner did not drive only normalized native Swing");
+
+    sample.leftTrigger = 0.0;
+    decision = policy.Update(sample);
+    bridge = ResolveControllerTriggerBridge(
+        decision, policy.NativeSwingHeld());
+    Require(decision.leftRelease && bridge.writeLeftTrigger &&
+                bridge.writeRightTrigger &&
+                bridge.rightTrigger == 0.0F,
+            "L2 release did not release normalized native Swing");
+
+    ControllerWebInputPolicy nativePolicy;
+    sample = Eligible();
+    sample.leftShoulderHeld = false;
+    decision = nativePolicy.Update(sample);
+    bridge = ResolveControllerTriggerBridge(
+        decision, nativePolicy.NativeSwingHeld());
+    Require(!bridge.writeLeftTrigger && !bridge.writeRightTrigger,
+            "non-layer controller input was not left native");
 }
 
 void TestFirstTriggerOwnsSingleRopeBothOrders() {
@@ -389,7 +461,8 @@ void TestDisconnectAndSourceEpochCannotTransferOwnership() {
     sample = Eligible(2U);
     sample.leftTrigger = 0.8;
     decision = disconnectPolicy.Update(sample);
-    Require(!decision.consumeLeftTrigger && !decision.leftAttach,
+    Require(decision.consumeLeftTrigger && decision.consumeRightTrigger &&
+                !decision.leftAttach,
             "new source inherited old held trigger");
     sample.leftTrigger = 0.0;
     (void)disconnectPolicy.Update(sample);
@@ -406,7 +479,8 @@ void TestDisconnectAndSourceEpochCannotTransferOwnership() {
     sample.sourceEpoch = 11U;
     decision = epochPolicy.Update(sample);
     Require(decision.rightRelease && decision.nativeSwingRelease &&
-                !decision.rightAttach && !decision.consumeRightTrigger &&
+                !decision.rightAttach && decision.consumeLeftTrigger &&
+                decision.consumeRightTrigger &&
                 !epochPolicy.NativeSwingHeld(),
             "source epoch change transferred held ownership");
 }
@@ -505,6 +579,10 @@ void RequirePolicyInvariants(const ControllerWebInputPolicy& policy,
         Require(!decision.leftAttach && !decision.rightAttach &&
                     !decision.nativeSwingPress,
                 "invalid gate produced new ownership");
+    } else {
+        Require(decision.layerActive && decision.consumeLeftTrigger &&
+                    decision.consumeRightTrigger,
+                "valid L1 layer did not reserve both triggers");
     }
 }
 
@@ -576,6 +654,10 @@ int main() {
         {"exact L2/R2 side mapping", TestExactLeftAndRightMapping},
         {"non-gated input remains vanilla",
          TestGroundAndNonGatedInputRemainVanilla},
+        {"airborne L1 layer reserves both triggers",
+         TestAirborneShoulderLayerAlwaysReservesBothTriggers},
+        {"normalized native trigger bridge",
+         TestNormalizedNativeTriggerBridge},
         {"first trigger owns both orders",
          TestFirstTriggerOwnsSingleRopeBothOrders},
         {"simultaneous press fails closed",

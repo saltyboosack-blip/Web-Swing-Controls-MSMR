@@ -5,7 +5,9 @@ uses for an ordinary web swing.
 
 - Hold **left mouse** while airborne to request a valid left-side anchor.
 - Hold **right mouse** while airborne to request a valid right-side anchor.
-- On controller, hold **L1** and use **L2** for left or **R2** for right.
+- On controller, hold **L1/LB** and use **L2/LT** for left or **R2/RT** for
+  right. While the layer is held, both triggers are reserved for swinging, so
+  their normal actions do not fire.
 - Releasing the owning button releases the web.
 
 The mod retains the game's native swing action, anchors, animations, physics,
@@ -19,7 +21,7 @@ TrueSwing physics project.
 - Marvel's Spider-Man Remastered on Steam
 - Game build `23986256`
 - `Spider-Man.exe` version `4.0630.0.0`
-- Overstrike 1.8.0 or newer
+- Exact Overstrike 1.8.0 build documented in the release manifest
 
 Unsupported executable builds are rejected rather than hooked.
 
@@ -36,14 +38,16 @@ processes. The proxy update does not change game assets or swing physics.
 
 ## Installation
 
-1. Download `Web_Swing_Controlsv0.2.0-beta.zip` from the GitHub release or the
-   Nexus Mods page and extract the entire archive.
+1. Download `Web_Swing_Controls_MSMR_v0.2.1-beta_FULL_INSTALL.zip` from the
+   GitHub release or Nexus Mods and extract the entire archive. This is the
+   complete mod; no earlier version or separate controller update is needed.
 2. Close the game and Overstrike.
 3. Run `1_INSTALL_PROXY_FIX.cmd` and select your `Overstrike.exe` when asked.
    The installer validates the selected folder, backs up Overstrike's original
    proxy, and installs the host-gated replacement.
 4. Open Overstrike and enable `.script` support.
-5. Add `Web_Swing_Controlsv0.2.0-beta.script` from the extracted `MOD` folder.
+5. Add `mod/Web_Swing_Controls_MSMR_v0.2.1-beta.script` from the extracted
+   folder.
 6. Install mods through Overstrike, close Overstrike, and launch the game
    normally through Steam.
 
@@ -91,10 +95,13 @@ For the proxy, follow `ScriptsProxy/BUILDING.md` and
 
 | Artifact | SHA-256 |
 | --- | --- |
-| Working ZIP | `5E848088537A6AB66E349C50F82CC658B8D380ECB0C1BF7D45C178CCC232273A` |
-| Controls DLL | `61C2537DD141D803B177B2988119A284CCC8B30CCAA812947528F3E0B014A223` |
+| Complete v0.2.1 ZIP | `C3110C70995EE132F644E7A2AF7BECD68B5CB4F578120B55A653065FA9BD37C4` |
+| Controls DLL | `1E0AC0AE9FA82B59F06B5CBCD2A915FECA8FAEEBD924A1306A5471810CE0EBC8` |
 | Compatibility proxy | `FFB6AD902798D7DF87F6D3FDE3B5A4BAE1E9212A40971B346452A5064768E111` |
-| Source ZIP | `2A1766057C705D4B585E2A37EC665B06554418178B5D2DCA1A9015017BEC9363` |
+
+Version 0.2.1 passed all seven native test executables. The user then
+installed the complete package and confirmed the controller mechanic works in
+game on a PS5 controller.
 
 These are unsigned native modding DLLs that use MinHook and Windows memory
 protection APIs. That behavior can attract generic antivirus heuristics. The
@@ -104,4 +111,3 @@ complete source and reproducible build instructions are provided for review.
 
 This repository is distributed under the GNU General Public License v3.0. See
 `LICENSE` and the component-specific third-party license files.
-

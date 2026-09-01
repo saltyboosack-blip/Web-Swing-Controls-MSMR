@@ -18,11 +18,15 @@
 #include "AirborneWebInputPolicy.h"
 #if defined(TRUESWING_CONTROLS_ONLY)
 #include "ControllerSourceRoute.h"
+#include "ControllerTriggerBridge.h"
 #include "ControllerWebInputPolicy.h"
 #endif
 #include "MemoryAccess.h"
 #include "MoverBinding.h"
 #include "NativeAnchorSidePolicy.h"
+#if defined(TRUESWING_CONTROLS_ONLY)
+#include "Logger.h"
+#endif
 #if !defined(TRUESWING_CONTROLS_ONLY)
 #include "SwingSteeringPolicy.h"
 #endif
@@ -748,8 +752,11 @@ void BeginSideRequestCancellation() noexcept {
 #if defined(TRUESWING_CONTROLS_ONLY)
 struct NativeGamepadSample final {
     std::uintptr_t device{};
+    std::uintptr_t vtable{};
+    std::uint32_t type{};
     bool connected{};
     bool leftShoulderHeld{};
+    bool soleConnectedFallback{};
     float leftTrigger{};
     float rightTrigger{};
 };
@@ -787,9 +794,15 @@ struct NativeGamepadSample final {
         return false;
     }
     output = NativeGamepadSample{
-        device, connected != 0U,
-        (leftShoulder & kNativeButtonHeldMask) != 0U, leftTrigger,
-        rightTrigger};
+        .device = device,
+        .vtable = vtable,
+        .type = type,
+        .connected = connected != 0U,
+        .leftShoulderHeld =
+            (leftShoulder & kNativeButtonHeldMask) != 0U,
+        .leftTrigger = leftTrigger,
+        .rightTrigger = rightTrigger,
+    };
     return true;
 }
 
@@ -810,13 +823,70 @@ struct NativeGamepadSample final {
     NativeGamepadSample primary{};
     if (TryReadU32(input + kPrimaryPlayerDeviceIndexOffset, primaryIndex) &&
         TryReadInputDevice(input, primaryIndex, primaryDevice) &&
-        TryReadNativeGamepad(primaryDevice, primary)) {
+        TryReadNativeGamepad(primaryDevice, primary) && primary.connected) {
         output = primary;
         return true;
     }
-    // Logical player 0 is authoritative. A missing, reassigned, or unknown
-    // main-pad mapping is a source boundary; never borrow another device.
-    return false;
+
+    // The native primary-device selector is finalized after this device-update
+    // callback on some backends. If it does not yet identify a gamepad, accept
+    // a fallback only when exactly one recognized connected gamepad exists.
+    // Multiple connected pads remain ambiguous and fail closed.
+    NativeGamepadSample sole{};
+    bool found = false;
+    for (std::uint32_t index = 0U; index < kInputDeviceCapacity; ++index) {
+        std::uintptr_t device = 0U;
+        NativeGamepadSample candidate{};
+        if (!TryReadInputDevice(input, index, device) || device == 0U ||
+            (found && device == sole.device) ||
+            !TryReadNativeGamepad(device, candidate) ||
+            !candidate.connected) {
+            continue;
+        }
+        if (found) {
+            return false;
+        }
+        sole = candidate;
+        found = true;
+    }
+    if (!found) {
+        return false;
+    }
+    sole.soleConnectedFallback = true;
+    output = sole;
+    return true;
+}
+
+[[nodiscard]] const char* NativeGamepadBackendName(
+    std::uintptr_t vtable) noexcept {
+    if (vtable == g_moduleBase + kWindowsGamingInputGamepadVtableRva) {
+        return "Windows.Gaming.Input";
+    }
+    if (vtable == g_moduleBase + kSceGamepadVtableRva) {
+        return "Sony SCE";
+    }
+    if (vtable == g_moduleBase + kSteamInputGamepadVtableRva) {
+        return "Steam Input";
+    }
+    if (vtable == g_moduleBase + kXInputGamepadVtableRva) {
+        return "XInput";
+    }
+    return "unknown";
+}
+
+void LogControllerRoute(const NativeGamepadSample& gamepad,
+                        const ControllerSourceRouteState& route) noexcept {
+    if (!route.changed || !route.device.has_value()) {
+        return;
+    }
+    char line[256]{};
+    sprintf_s(
+        line,
+        "Controller route active: backend=%s type=%u selection=%s; L1/LB layer uses normalized LT/RT input.",
+        NativeGamepadBackendName(gamepad.vtable), gamepad.type,
+        gamepad.soleConnectedFallback ? "sole-connected-fallback"
+                                      : "logical-player-0");
+    Logger::Write(line);
 }
 #endif
 
@@ -972,22 +1042,14 @@ struct NativeGamepadSample final {
     result.foreground = foreground;
     std::uint8_t handMirror = 1U;
     bool nativeShiftDown = false;
-    const bool controllerOwns =
-        g_controllerInputPolicy.NativeSwingHeld();
-    const bool bridgeConfigurationReady =
-        controllerOwns ||
-        (SwingBindingIsExclusiveLeftShift() && SwingUsesHold());
     result.runtimeReady =
         g_ready.load(std::memory_order_acquire) &&
         ExactVtable(input, kNativeInputVtableRva) &&
         TryReadByte(g_moduleBase + kNativeHandMirrorFlagRva, handMirror) &&
         handMirror == 0U && TryNativeShiftState(input, nativeShiftDown) &&
-        bridgeConfigurationReady && !MouseOwnsNativeHold() &&
-        (controllerOwns
-             ? (g_syntheticShiftDown && g_nativeBridgeShiftDown &&
-                nativeShiftDown)
-             : (!g_syntheticShiftDown && !g_nativeBridgeShiftDown &&
-                !nativeShiftDown));
+        SwingUsesHold() && !MouseOwnsNativeHold() &&
+        !g_syntheticShiftDown && !g_nativeBridgeShiftDown &&
+        !nativeShiftDown;
     if (!result.foreground || !result.runtimeReady) {
         return result;
     }
@@ -1068,27 +1130,24 @@ void InjectNativeShift(std::uintptr_t input, bool down) noexcept {
     std::uintptr_t input, const ControllerWebInputDecision& decision,
     const HeroSnapshot* provenHero = nullptr) noexcept {
     // The controller policy quarantines same-sample side transfers. Reject a
-    // broken decision before it can restart native Shift or lose a physical
-    // Shift handoff.
+    // broken decision before it can restart the native Swing trigger in one
+    // device sample.
     if (decision.nativeSwingPress && decision.nativeSwingRelease) {
         return false;
     }
     const WebInputDecision release{
         .leftRelease = decision.leftRelease,
         .rightRelease = decision.rightRelease,
-        .nativeSwingRelease = decision.nativeSwingRelease,
     };
-    if ((release.leftRelease || release.rightRelease ||
-         release.nativeSwingRelease) &&
+    if ((release.leftRelease || release.rightRelease) &&
         !ApplyDecision(input, release)) {
         return false;
     }
     const WebInputDecision press{
         .leftAttach = decision.leftAttach,
         .rightAttach = decision.rightAttach,
-        .nativeSwingPress = decision.nativeSwingPress,
     };
-    if (press.leftAttach || press.rightAttach || press.nativeSwingPress) {
+    if (press.leftAttach || press.rightAttach) {
         return ApplyDecision(input, press, provenHero);
     }
     return true;
@@ -1620,24 +1679,14 @@ void __fastcall HookInputDeviceUpdate(void* inputObject,
         (void)ApplyControllerDecision(input, decision);
         return;
     }
+    LogControllerRoute(gamepad, route);
 
     HeroSnapshot provenHero{};
     const bool foreground = ForegroundProcess();
-    const bool freshLeftCandidate =
-        std::isfinite(gamepad.leftTrigger) &&
-        !g_controllerInputPolicy.LeftTriggerDown() &&
-        static_cast<double>(gamepad.leftTrigger) >=
-            ControllerWebInputPolicy::kTriggerPressThreshold;
-    const bool freshRightCandidate =
-        std::isfinite(gamepad.rightTrigger) &&
-        !g_controllerInputPolicy.RightTriggerDown() &&
-        static_cast<double>(gamepad.rightTrigger) >=
-            ControllerWebInputPolicy::kTriggerPressThreshold;
     WebInputEligibility eligibility{};
     eligibility.foreground = foreground;
     if (g_controllerInputPolicy.NativeSwingHeld() ||
-        (gamepad.leftShoulderHeld &&
-         (freshLeftCandidate || freshRightCandidate))) {
+        gamepad.leftShoulderHeld) {
         eligibility = ControllerEligibilityForDown(input, foreground,
                                                    &provenHero);
     }
@@ -1655,21 +1704,38 @@ void __fastcall HookInputDeviceUpdate(void* inputObject,
     const ControllerWebInputDecision decision =
         g_controllerInputPolicy.Update(sample);
 
+    const bool applied = ApplyControllerDecision(
+        input, decision,
+        eligibility.airborneProven ? &provenHero : nullptr);
+    if (!applied) {
+        const ControllerWebInputDecision cancel =
+            g_controllerInputPolicy.CancelAndReset();
+        (void)ApplyControllerDecision(input, cancel);
+        (void)g_controllerSourceRoute.Update(std::nullopt);
+    }
+
+    // Read physical values first, then replace the game-facing layer. Both
+    // LT/L2 and RT/R2 are reserved while L1/LB is active. A held owned web is
+    // driven through the game's normalized RT/R2 Swing input, so controller
+    // mode never depends on a synthetic keyboard Shift being accepted.
+    const ControllerTriggerBridgeDecision triggerBridge =
+        ResolveControllerTriggerBridge(
+            decision,
+            applied && g_controllerInputPolicy.NativeSwingHeld());
     bool neutralized = true;
-    if (decision.consumeLeftTrigger) {
+    if (triggerBridge.writeLeftTrigger) {
         neutralized = TryWriteFloat(
-                          gamepad.device + kGamepadLeftTriggerOffset, 0.0F) &&
+                          gamepad.device + kGamepadLeftTriggerOffset,
+                          triggerBridge.leftTrigger) &&
                       neutralized;
     }
-    if (decision.consumeRightTrigger) {
+    if (triggerBridge.writeRightTrigger) {
         neutralized = TryWriteFloat(
-                          gamepad.device + kGamepadRightTriggerOffset, 0.0F) &&
+                          gamepad.device + kGamepadRightTriggerOffset,
+                          triggerBridge.rightTrigger) &&
                       neutralized;
     }
-    if (!neutralized ||
-        !ApplyControllerDecision(
-            input, decision,
-            eligibility.airborneProven ? &provenHero : nullptr)) {
+    if (!neutralized) {
         const ControllerWebInputDecision cancel =
             g_controllerInputPolicy.CancelAndReset();
         (void)ApplyControllerDecision(input, cancel);
