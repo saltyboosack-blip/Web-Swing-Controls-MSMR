@@ -1,5 +1,16 @@
 # Changelog
 
+## SMPCTool Companion 1.0.0
+
+- Added an unofficial standalone companion for jedijosh920's Spider-Man PC
+  Modding Tool v1.1.1.
+- Read the official tool's `assetArchiveDir.txt` to locate the correct game
+  folder without modifying or redistributing SMPCTool.
+- Added exact payload and game-build verification, conflict refusal, verified
+  backups, staged writes, rollback, and twelve fixture tests.
+- Documented why this native script mod cannot work as an `.smpcmod` archive
+  replacement package.
+
 ## 0.2.1-beta
 
 - Integrated the controller repair into the complete install package; no

@@ -38,6 +38,27 @@ processes. The proxy update does not change game assets or swing physics.
 
 ## Installation
 
+Two supported install methods exist. Use only one.
+
+### jedijosh920's Spider-Man PC Modding Tool v1.1.1
+
+Web Swing Controls cannot be packaged as a functional `.smpcmod`: that format
+replaces archive assets, while this mod requires native script files. The
+GitHub release therefore includes an unofficial standalone companion for the
+official tool. It contains no SMPCTool code or binary and never changes the
+tool, game `toc`, or archive files.
+
+1. Download and run the official SMPCTool v1.1.1 from Nexus Mods page 51.
+2. Select the game's `asset_archive` folder, then close SMPCTool and the game.
+3. Extract the companion folder into the folder containing `SMPCTool.exe`.
+4. Run `WebSwingControls_SMPCTool_Companion.exe`, review the detected paths,
+   then choose **Install**.
+
+See [`SMPCToolCompanion/README.md`](SMPCToolCompanion/README.md) for safety,
+source, and build details.
+
+### Overstrike 1.8.0
+
 1. Download `Web_Swing_Controls_MSMR_v0.2.1-beta_FULL_INSTALL.zip` from the
    GitHub release or Nexus Mods and extract the entire archive. This is the
    complete mod; no earlier version or separate controller update is needed.
@@ -96,12 +117,18 @@ For the proxy, follow `ScriptsProxy/BUILDING.md` and
 | Artifact | SHA-256 |
 | --- | --- |
 | Complete v0.2.1 ZIP | `C3110C70995EE132F644E7A2AF7BECD68B5CB4F578120B55A653065FA9BD37C4` |
+| SMPCTool Companion v1.0.0 ZIP | `DF16A8924AC3B346AEBD6F7672854400601B0C6A68690C13889A835ACEB574DB` |
+| SMPCTool Companion EXE | `0B4693731B83318C24E89D9851CE6FC1D35633BF0032203D5CD1F5A35137813F` |
 | Controls DLL | `1E0AC0AE9FA82B59F06B5CBCD2A915FECA8FAEEBD924A1306A5471810CE0EBC8` |
 | Compatibility proxy | `FFB6AD902798D7DF87F6D3FDE3B5A4BAE1E9212A40971B346452A5064768E111` |
 
 Version 0.2.1 passed all seven native test executables. The user then
 installed the complete package and confirmed the controller mechanic works in
 game on a PS5 controller.
+
+The standalone SMPCTool companion passed twelve installer fixture tests. It
+does not modify or redistribute SMPCTool and does not convert the native mod
+into a misleading `.smpcmod` asset package.
 
 These are unsigned native modding DLLs that use MinHook and Windows memory
 protection APIs. That behavior can attract generic antivirus heuristics. The
