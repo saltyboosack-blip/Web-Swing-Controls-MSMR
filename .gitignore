@@ -6,9 +6,6 @@ out/
 x64/
 Debug/
 Release/
-bin/
-obj/
-test-output/
 CMakeFiles/
 CMakeCache.txt
 cmake_install.cmake
@@ -27,5 +24,3 @@ CTestTestfile.cmake
 *.rar
 *.log
 
-# The Modding Tool source project links this upstream runtime dependency.
-!ModdingToolAddon/GDeflateWrapper/native/win-x64/libdeflate.dll
