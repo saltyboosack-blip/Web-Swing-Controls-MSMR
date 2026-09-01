@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.24)
 
-project(WebSwingControls VERSION 0.2.1 LANGUAGES C CXX)
+project(WebSwingControls VERSION 0.3.0 LANGUAGES C CXX)
 
 if(NOT WIN32 OR NOT MSVC)
     message(FATAL_ERROR "Web Swing Controls requires Windows and MSVC.")

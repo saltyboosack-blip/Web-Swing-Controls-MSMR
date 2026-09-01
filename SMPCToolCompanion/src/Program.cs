@@ -9,7 +9,7 @@ namespace WebSwingControls.SMPCToolCompanion
 {
     internal static class Program
     {
-        public const string Version = "1.0.0";
+        public const string Version = "1.1.0-rc2";
 
         [STAThread]
         private static void Main()
@@ -24,9 +24,10 @@ namespace WebSwingControls.SMPCToolCompanion
             InstallerPolicy policy = new InstallerPolicy();
             policy.ExpectedGameExecutableSha256 = "E297D4D94F1FFE4FEBF289745E79E7B6FA233A788E7A00F480FC77C55DB81AD1";
             policy.ExpectedProxySha256 = "FFB6AD902798D7DF87F6D3FDE3B5A4BAE1E9212A40971B346452A5064768E111";
-            policy.ExpectedControlsSha256 = "1E0AC0AE9FA82B59F06B5CBCD2A915FECA8FAEEBD924A1306A5471810CE0EBC8";
+            policy.ExpectedControlsSha256 = "10F25A79F541731BAF898F28316B4FBE444E96E07C6B47F46E49C55F9AB691FC";
             policy.ReplaceableProxySha256.Add("2218355540C903039D84389237EFEF2CC2C9A1611EBC59C45D51D4767E79C7BF");
             policy.ReplaceableControlsSha256.Add("61C2537DD141D803B177B2988119A284CCC8B30CCAA812947528F3E0B014A223");
+            policy.ReplaceableControlsSha256.Add("1E0AC0AE9FA82B59F06B5CBCD2A915FECA8FAEEBD924A1306A5471810CE0EBC8");
             policy.IsProtectedProcessRunning = delegate
             {
                 return Process.GetProcessesByName("Spider-Man").Length > 0

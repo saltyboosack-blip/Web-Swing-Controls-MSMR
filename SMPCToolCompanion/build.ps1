@@ -13,7 +13,7 @@ param(
 Set-StrictMode -Version Latest
 $ErrorActionPreference = 'Stop'
 
-$expectedControlsHash = '1E0AC0AE9FA82B59F06B5CBCD2A915FECA8FAEEBD924A1306A5471810CE0EBC8'
+$expectedControlsHash = '10F25A79F541731BAF898F28316B4FBE444E96E07C6B47F46E49C55F9AB691FC'
 $expectedProxyHash = 'FFB6AD902798D7DF87F6D3FDE3B5A4BAE1E9212A40971B346452A5064768E111'
 
 $controls = (Resolve-Path -LiteralPath $ControlsDllPath).Path
@@ -41,7 +41,7 @@ $sourceDirectory = Join-Path $PSScriptRoot 'src'
 $testDirectory = Join-Path $PSScriptRoot 'tests'
 $testBin = Join-Path $output 'test-bin'
 $testArtifacts = Join-Path $output 'test-artifacts'
-$release = Join-Path $output 'Web_Swing_Controls_SMPCTool_Companion_v1.0.0'
+$release = Join-Path $output 'Web_Swing_Controls_SMPCTool_Companion_v1.1.0-rc2'
 $payload = Join-Path $release 'payload'
 [void](New-Item -ItemType Directory -Path $testBin)
 [void](New-Item -ItemType Directory -Path $release)

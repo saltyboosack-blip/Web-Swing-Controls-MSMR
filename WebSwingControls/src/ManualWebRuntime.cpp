@@ -48,6 +48,7 @@ constexpr std::uintptr_t kNativeInputDeviceUpdateRva = 0x01CE2AB0;
 constexpr std::uintptr_t kNativeMainGamepadGetterEvidenceRva = 0x01CE0910;
 constexpr std::uintptr_t kNativeInputOrderingEvidenceRva = 0x01CE214A;
 constexpr std::uintptr_t kNativeL1MappingEvidenceRva = 0x01D16941;
+constexpr std::uintptr_t kNativeR1MappingEvidenceRva = 0x01D16962;
 constexpr std::uintptr_t kNativeTriggerMappingEvidenceRva = 0x01D16A04;
 constexpr std::uintptr_t kNativeL2AggregateEvidenceRva = 0x01CE263F;
 constexpr std::uintptr_t kNativeR2AggregateEvidenceRva = 0x01CE26B9;
@@ -106,6 +107,7 @@ constexpr std::size_t kInputDeviceCapacity = 20U;
 constexpr std::uintptr_t kGamepadConnectedOffset = 0x9;
 constexpr std::uintptr_t kGamepadTypeOffset = 0x90;
 constexpr std::uintptr_t kGamepadLeftShoulderStateOffset = 0x30;
+constexpr std::uintptr_t kGamepadRightShoulderStateOffset = 0x34;
 constexpr std::uintptr_t kGamepadLeftTriggerOffset = 0x48;
 constexpr std::uintptr_t kGamepadRightTriggerOffset = 0x4C;
 constexpr std::uint32_t kNativeButtonHeldMask = 4U;
@@ -161,6 +163,11 @@ constexpr std::array<std::uint8_t, 33> kNativeL1MappingEvidence{
     0x0F, 0xB7, 0x54, 0x24, 0x34, 0x4C, 0x8D, 0x43, 0x10, 0x08,
     0x43, 0x08, 0x41, 0xB9, 0x98, 0x01, 0x00, 0x00, 0x66, 0xC1,
     0xEA, 0x08, 0x48, 0x8B, 0xCB, 0x80, 0xE2, 0x01, 0xE8, 0x7E,
+    0x6C, 0xFF, 0xFF};
+constexpr std::array<std::uint8_t, 33> kNativeR1MappingEvidence{
+    0x0F, 0xB7, 0x54, 0x24, 0x34, 0x4C, 0x8D, 0x43, 0x10, 0x08,
+    0x43, 0x08, 0x41, 0xB9, 0x99, 0x01, 0x00, 0x00, 0x66, 0xC1,
+    0xEA, 0x09, 0x48, 0x8B, 0xCB, 0x80, 0xE2, 0x01, 0xE8, 0x5D,
     0x6C, 0xFF, 0xFF};
 constexpr std::array<std::uint8_t, 46> kNativeTriggerMappingEvidence{
     0x44, 0x0F, 0xB6, 0x44, 0x24, 0x36, 0x45, 0x33, 0xC9, 0x08,
@@ -463,6 +470,16 @@ template <std::size_t Size>
 }
 
 #if defined(TRUESWING_CONTROLS_ONLY)
+[[nodiscard]] bool TryWriteU32(std::uintptr_t address,
+                               std::uint32_t value) noexcept {
+    __try {
+        *reinterpret_cast<std::uint32_t*>(address) = value;
+        return true;
+    } __except (EXCEPTION_EXECUTE_HANDLER) {
+        return false;
+    }
+}
+
 [[nodiscard]] bool TryWriteFloat(std::uintptr_t address,
                                  float value) noexcept {
     __try {
@@ -756,6 +773,7 @@ struct NativeGamepadSample final {
     std::uint32_t type{};
     bool connected{};
     bool leftShoulderHeld{};
+    bool rightShoulderHeld{};
     bool soleConnectedFallback{};
     float leftTrigger{};
     float rightTrigger{};
@@ -779,6 +797,7 @@ struct NativeGamepadSample final {
     std::uintptr_t vtable = 0U;
     std::uint32_t type = 0U;
     std::uint32_t leftShoulder = 0U;
+    std::uint32_t rightShoulder = 0U;
     std::uint8_t connected = 0U;
     float leftTrigger = 0.0F;
     float rightTrigger = 0.0F;
@@ -789,6 +808,8 @@ struct NativeGamepadSample final {
         !TryReadByte(device + kGamepadConnectedOffset, connected) ||
         !TryReadU32(device + kGamepadLeftShoulderStateOffset,
                     leftShoulder) ||
+        !TryReadU32(device + kGamepadRightShoulderStateOffset,
+                    rightShoulder) ||
         !TryReadFloat(device + kGamepadLeftTriggerOffset, leftTrigger) ||
         !TryReadFloat(device + kGamepadRightTriggerOffset, rightTrigger)) {
         return false;
@@ -800,6 +821,8 @@ struct NativeGamepadSample final {
         .connected = connected != 0U,
         .leftShoulderHeld =
             (leftShoulder & kNativeButtonHeldMask) != 0U,
+        .rightShoulderHeld =
+            (rightShoulder & kNativeButtonHeldMask) != 0U,
         .leftTrigger = leftTrigger,
         .rightTrigger = rightTrigger,
     };
@@ -882,7 +905,7 @@ void LogControllerRoute(const NativeGamepadSample& gamepad,
     char line[256]{};
     sprintf_s(
         line,
-        "Controller route active: backend=%s type=%u selection=%s; L1/LB layer uses normalized LT/RT input.",
+        "Controller route active: backend=%s type=%u selection=%s; L2/LT=left swing, R2/RT=right swing, L1/LB=zoom.",
         NativeGamepadBackendName(gamepad.vtable), gamepad.type,
         gamepad.soleConnectedFallback ? "sole-connected-fallback"
                                       : "logical-player-0");
@@ -1685,8 +1708,14 @@ void __fastcall HookInputDeviceUpdate(void* inputObject,
     const bool foreground = ForegroundProcess();
     WebInputEligibility eligibility{};
     eligibility.foreground = foreground;
-    if (g_controllerInputPolicy.NativeSwingHeld() ||
-        gamepad.leftShoulderHeld) {
+    const bool triggerCandidate =
+        (std::isfinite(gamepad.leftTrigger) &&
+         gamepad.leftTrigger >=
+             ControllerWebInputPolicy::kTriggerPressThreshold) ||
+        (std::isfinite(gamepad.rightTrigger) &&
+         gamepad.rightTrigger >=
+             ControllerWebInputPolicy::kTriggerPressThreshold);
+    if (g_controllerInputPolicy.NativeSwingHeld() || triggerCandidate) {
         eligibility = ControllerEligibilityForDown(input, foreground,
                                                    &provenHero);
     }
@@ -1696,7 +1725,6 @@ void __fastcall HookInputDeviceUpdate(void* inputObject,
         .focused = foreground,
         .runtimeReady = eligibility.runtimeReady,
         .airborneProven = eligibility.airborneProven,
-        .leftShoulderHeld = gamepad.leftShoulderHeld,
         .nativeSwingAvailable = eligibility.runtimeReady,
         .leftTrigger = static_cast<double>(gamepad.leftTrigger),
         .rightTrigger = static_cast<double>(gamepad.rightTrigger),
@@ -1714,26 +1742,34 @@ void __fastcall HookInputDeviceUpdate(void* inputObject,
         (void)g_controllerSourceRoute.Update(std::nullopt);
     }
 
-    // Read physical values first, then replace the game-facing layer. Both
-    // LT/L2 and RT/R2 are reserved while L1/LB is active. A held owned web is
-    // driven through the game's normalized RT/R2 Swing input, so controller
-    // mode never depends on a synthetic keyboard Shift being accepted.
+    // Read physical values first, then replace the game-facing state. Native
+    // L1/LB alone is suppressed and becomes normalized L2/LT zoom. L1/LB is
+    // passed through and zoom is cleared while R1/RB is also held, preserving
+    // native gameplay chords. Physical L2/LT and R2/RT directly select
+    // left/right airborne webs. A held owned web is driven through normalized
+    // R2/RT Swing, so controller mode never depends on synthetic keyboard
+    // Shift being accepted.
     const ControllerTriggerBridgeDecision triggerBridge =
         ResolveControllerTriggerBridge(
             decision,
-            applied && g_controllerInputPolicy.NativeSwingHeld());
+            applied && g_controllerInputPolicy.NativeSwingHeld(),
+            gamepad.leftShoulderHeld,
+            gamepad.rightShoulderHeld);
     bool neutralized = true;
-    if (triggerBridge.writeLeftTrigger) {
+    if (triggerBridge.writeLeftShoulder) {
+        neutralized = TryWriteU32(
+            gamepad.device + kGamepadLeftShoulderStateOffset,
+            triggerBridge.leftShoulderState);
+    }
+    if (neutralized && triggerBridge.writeLeftTrigger) {
         neutralized = TryWriteFloat(
                           gamepad.device + kGamepadLeftTriggerOffset,
-                          triggerBridge.leftTrigger) &&
-                      neutralized;
+                          triggerBridge.leftTrigger);
     }
-    if (triggerBridge.writeRightTrigger) {
+    if (neutralized && triggerBridge.writeRightTrigger) {
         neutralized = TryWriteFloat(
                           gamepad.device + kGamepadRightTriggerOffset,
-                          triggerBridge.rightTrigger) &&
-                      neutralized;
+                          triggerBridge.rightTrigger);
     }
     if (!neutralized) {
         const ControllerWebInputDecision cancel =
@@ -1935,6 +1971,8 @@ bool PrepareManualWebRuntime(std::uintptr_t moduleBase, std::string& reason) {
                  kNativeInputOrderingEvidence) ||
         !Matches(moduleBase + kNativeL1MappingEvidenceRva,
                  kNativeL1MappingEvidence) ||
+        !Matches(moduleBase + kNativeR1MappingEvidenceRva,
+                 kNativeR1MappingEvidence) ||
         !Matches(moduleBase + kNativeTriggerMappingEvidenceRva,
                  kNativeTriggerMappingEvidence) ||
         !Matches(moduleBase + kNativeL2AggregateEvidenceRva,

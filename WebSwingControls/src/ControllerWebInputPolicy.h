@@ -18,17 +18,16 @@ struct ControllerWebInputSample final {
     bool focused{};
     bool runtimeReady{};
     bool airborneProven{};
-    bool leftShoulderHeld{};
     bool nativeSwingAvailable{};
     double leftTrigger{};
     double rightTrigger{};
 };
 
 struct ControllerWebInputDecision final {
-    // While layerActive, both trigger axes belong to the mod. The adapter
-    // neutralizes them in the game-facing device state, then drives only the
-    // game's normalized native Swing trigger. Outside the layer, unowned axes
-    // remain native and unchanged.
+    // While layerActive, both physical trigger axes belong to the mod. The
+    // adapter neutralizes L2/LT as a native zoom input and drives only the
+    // game's normalized native Swing trigger. L1/LB-to-zoom remapping is a
+    // separate bridge concern and never participates in web ownership.
     bool layerActive{};
     bool consumeLeftTrigger{};
     bool consumeRightTrigger{};
@@ -99,12 +98,11 @@ public:
         decision.consumeRightTrigger = right_.captured;
 
         const bool gate = sample.runtimeReady && sample.airborneProven &&
-                          sample.leftShoulderHeld &&
                           sample.nativeSwingAvailable;
         decision.layerActive = gate;
         if (gate) {
-            // L1/LB is a true input layer: neither physical trigger may leak
-            // into its ordinary action while the airborne layer is active.
+            // Airborne direct-trigger mode: neither physical trigger may leak
+            // into its ordinary action while side-swing selection is active.
             decision.consumeLeftTrigger = true;
             decision.consumeRightTrigger = true;
         }

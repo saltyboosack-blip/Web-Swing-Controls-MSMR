@@ -1,5 +1,27 @@
 # Changelog
 
+## 0.3.0-rc2
+
+- Preserved native L1/LB + R1/RB gameplay chords, including environmental
+  item pickup, by suspending the L1/LB-to-zoom remap while both shoulders are
+  held.
+- Kept direct airborne L2/LT left swing and R2/RT right swing unchanged.
+- Confirmed the right-shoulder state field and mapping against exact Steam
+  build 23986256 before adding the chord exception.
+- Confirmed the complete controller layout working in game on a PS5
+  controller, including native L1+R1 item pickup.
+
+## 0.3.0-rc1
+
+- Removed the controller L1/LB swing-layer requirement.
+- Made airborne L2/LT directly request a left-side swing and R2/RT directly
+  request a right-side swing.
+- Remapped the former native L2/LT zoom action to L1/LB and suppressed L1/LB's
+  original action.
+- Kept mouse controls, native anchors, native swinging, and physics unchanged.
+- Added direct-trigger, remap, ownership, disconnect, focus-loss, and exhaustive
+  controller policy coverage.
+
 ## SMPCTool Companion 1.0.0
 
 - Added an unofficial standalone companion for jedijosh920's Spider-Man PC

@@ -1,5 +1,5 @@
 WEB SWING CONTROLS - SMPCTOOL COMPANION
-Version 1.0.0
+Version 1.1.0 RC2
 
 This is an unofficial standalone companion for jedijosh920's Spider-Man PC
 Modding Tool (SMPCTool) v1.1.1. It is not a modified copy of SMPCTool and does
@@ -32,6 +32,15 @@ SMPCTool itself, the game's toc, or asset archives. It installs only:
 Every replaced file receives a verified backup under the game folder's
 "WSC Backups" directory. Unknown game builds, loaders, and
 TrueSwing DLLs are refused. The companion never closes running programs.
+
+CONTROLLER LAYOUT
+
+  Airborne L2/LT = left-side swing
+  Airborne R2/RT = right-side swing
+  L1/LB = former L2/LT zoom action
+  L1/LB + R1/RB = native gameplay chord; zoom is suspended
+
+No L1/LB hold is required for swinging. Mouse controls remain unchanged.
 
 SUPPORTED GAME
 

@@ -57,7 +57,6 @@ void Require(bool condition, const char* message) {
             .focused = true,
             .runtimeReady = true,
             .airborneProven = true,
-            .leftShoulderHeld = true,
             .nativeSwingAvailable = true,
             .leftTrigger = leftTrigger,
             .rightTrigger = rightTrigger};

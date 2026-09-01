@@ -43,7 +43,6 @@ void Require(bool condition, const char* message) {
             .focused = true,
             .runtimeReady = true,
             .airborneProven = true,
-            .leftShoulderHeld = true,
             .nativeSwingAvailable = true,
             .leftTrigger = 0.0,
             .rightTrigger = 0.0};
@@ -108,7 +107,7 @@ void TestSchmittThresholdsAndJitter() {
             "finite high value was not clamped to pressed");
 }
 
-void TestFreshEdgeRequiredAfterStartupAndGateEntry() {
+void TestFreshEdgeRequiredAfterStartupAndAirborneEntry() {
     ControllerWebInputPolicy startupPolicy;
     ControllerWebInputSample sample = Eligible();
     sample.leftTrigger = 1.0;
@@ -123,25 +122,25 @@ void TestFreshEdgeRequiredAfterStartupAndGateEntry() {
     Require(decision.leftAttach,
             "neutral then fresh startup edge did not attach");
 
-    ControllerWebInputPolicy gatePolicy;
+    ControllerWebInputPolicy airbornePolicy;
     sample = Eligible();
-    sample.leftShoulderHeld = false;
-    (void)gatePolicy.Update(sample);
+    sample.airborneProven = false;
+    (void)airbornePolicy.Update(sample);
     sample.leftTrigger = 0.8;
-    decision = gatePolicy.Update(sample);
+    decision = airbornePolicy.Update(sample);
     Require(!decision.consumeLeftTrigger && !decision.leftAttach,
-            "non-gated trigger press was captured");
-    sample.leftShoulderHeld = true;
-    decision = gatePolicy.Update(sample);
+            "grounded trigger press was captured");
+    sample.airborneProven = true;
+    decision = airbornePolicy.Update(sample);
     Require(decision.layerActive && decision.consumeLeftTrigger &&
                 decision.consumeRightTrigger && !decision.leftAttach,
-            "L1 gate stole a trigger already held");
+            "airborne entry stole a trigger already held");
     sample.leftTrigger = 0.0;
-    (void)gatePolicy.Update(sample);
+    (void)airbornePolicy.Update(sample);
     sample.leftTrigger = 0.5;
-    decision = gatePolicy.Update(sample);
+    decision = airbornePolicy.Update(sample);
     Require(decision.leftAttach,
-            "fresh edge after L1 gate entry did not attach");
+            "fresh edge after airborne entry did not attach");
 }
 
 void TestExactLeftAndRightMapping() {
@@ -174,7 +173,7 @@ void TestExactLeftAndRightMapping() {
 }
 
 void TestGroundAndNonGatedInputRemainVanilla() {
-    for (int gateCase = 0; gateCase < 6; ++gateCase) {
+    for (int gateCase = 0; gateCase < 5; ++gateCase) {
         ControllerWebInputPolicy policy;
         ControllerWebInputSample sample = Eligible();
         switch (gateCase) {
@@ -182,18 +181,15 @@ void TestGroundAndNonGatedInputRemainVanilla() {
             sample.airborneProven = false;
             break;
         case 1:
-            sample.leftShoulderHeld = false;
-            break;
-        case 2:
             sample.runtimeReady = false;
             break;
-        case 3:
+        case 2:
             sample.nativeSwingAvailable = false;
             break;
-        case 4:
+        case 3:
             sample.focused = false;
             break;
-        case 5:
+        case 4:
             sample.connected = false;
             break;
         default:
@@ -210,14 +206,14 @@ void TestGroundAndNonGatedInputRemainVanilla() {
     }
 }
 
-void TestAirborneShoulderLayerAlwaysReservesBothTriggers() {
+void TestAirborneModeAlwaysReservesBothTriggers() {
     ControllerWebInputPolicy policy;
     ControllerWebInputSample sample = Eligible();
     auto decision = policy.Update(sample);
     Require(decision.layerActive && decision.consumeLeftTrigger &&
                 decision.consumeRightTrigger &&
                 !HasOwnershipEffect(decision),
-            "neutral airborne L1 layer did not reserve both triggers");
+            "neutral airborne mode did not reserve both triggers");
 
     sample.leftTrigger = 0.2;
     sample.rightTrigger = 0.3;
@@ -232,24 +228,51 @@ void TestAirborneShoulderLayerAlwaysReservesBothTriggers() {
     Require(!decision.layerActive && !decision.consumeLeftTrigger &&
                 !decision.consumeRightTrigger &&
                 !HasOwnershipEffect(decision),
-            "grounded shoulder layer consumed unowned triggers");
+            "grounded mode consumed unowned triggers");
 }
 
-void TestNormalizedNativeTriggerBridge() {
+void TestControllerRemapAndNativeTriggerBridge() {
     ControllerWebInputPolicy policy;
     ControllerWebInputSample sample = Eligible();
     auto decision = policy.Update(sample);
     auto bridge = ResolveControllerTriggerBridge(
-        decision, policy.NativeSwingHeld());
-    Require(bridge.writeLeftTrigger && bridge.writeRightTrigger &&
+        decision, policy.NativeSwingHeld(), false, false);
+    Require(bridge.writeLeftShoulder && bridge.leftShoulderState == 0U &&
+                bridge.writeLeftTrigger && bridge.writeRightTrigger &&
                 bridge.leftTrigger == 0.0F &&
                 bridge.rightTrigger == 0.0F,
-            "neutral L1 layer did not suppress both native triggers");
+            "neutral direct-trigger mode did not suppress native controls");
+
+    bridge = ResolveControllerTriggerBridge(
+        decision, policy.NativeSwingHeld(), true, false);
+    Require(bridge.writeLeftShoulder && bridge.leftShoulderState == 0U &&
+                bridge.writeLeftTrigger && bridge.leftTrigger == 1.0F &&
+                bridge.rightTrigger == 0.0F,
+            "L1/LB did not become normalized L2/LT zoom");
+
+    bridge = ResolveControllerTriggerBridge(
+        decision, policy.NativeSwingHeld(), true, true);
+    Require(!bridge.writeLeftShoulder && bridge.writeLeftTrigger &&
+                bridge.leftTrigger == 0.0F &&
+                bridge.rightTrigger == 0.0F,
+            "L1/LB+R1/RB did not prioritize the native shoulder chord");
+
+    bridge = ResolveControllerTriggerBridge(
+        decision, policy.NativeSwingHeld(), false, true);
+    Require(bridge.writeLeftShoulder && bridge.leftShoulderState == 0U &&
+                bridge.writeLeftTrigger && bridge.leftTrigger == 0.0F,
+            "R1/RB alone changed the zoom remap");
+
+    bridge = ResolveControllerTriggerBridge(
+        decision, policy.NativeSwingHeld(), true, false);
+    Require(bridge.writeLeftShoulder && bridge.leftShoulderState == 0U &&
+                bridge.writeLeftTrigger && bridge.leftTrigger == 1.0F,
+            "releasing R1/RB did not restore L1/LB zoom");
 
     sample.leftTrigger = 0.7;
     decision = policy.Update(sample);
     bridge = ResolveControllerTriggerBridge(
-        decision, policy.NativeSwingHeld());
+        decision, policy.NativeSwingHeld(), false, false);
     Require(decision.leftAttach && bridge.writeLeftTrigger &&
                 bridge.writeRightTrigger &&
                 bridge.leftTrigger == 0.0F &&
@@ -259,7 +282,7 @@ void TestNormalizedNativeTriggerBridge() {
     sample.leftTrigger = 0.0;
     decision = policy.Update(sample);
     bridge = ResolveControllerTriggerBridge(
-        decision, policy.NativeSwingHeld());
+        decision, policy.NativeSwingHeld(), false, false);
     Require(decision.leftRelease && bridge.writeLeftTrigger &&
                 bridge.writeRightTrigger &&
                 bridge.rightTrigger == 0.0F,
@@ -267,12 +290,14 @@ void TestNormalizedNativeTriggerBridge() {
 
     ControllerWebInputPolicy nativePolicy;
     sample = Eligible();
-    sample.leftShoulderHeld = false;
+    sample.airborneProven = false;
     decision = nativePolicy.Update(sample);
     bridge = ResolveControllerTriggerBridge(
-        decision, nativePolicy.NativeSwingHeld());
-    Require(!bridge.writeLeftTrigger && !bridge.writeRightTrigger,
-            "non-layer controller input was not left native");
+        decision, nativePolicy.NativeSwingHeld(), true, false);
+    Require(bridge.writeLeftShoulder && bridge.leftShoulderState == 0U &&
+                bridge.writeLeftTrigger && bridge.leftTrigger == 1.0F &&
+                !bridge.writeRightTrigger,
+            "grounded L1/LB-to-zoom remap was not isolated from R2/RT");
 }
 
 void TestFirstTriggerOwnsSingleRopeBothOrders() {
@@ -372,7 +397,7 @@ void TestOwnerReleaseQuarantinesFreshOppositePress() {
 }
 
 void TestGateLossReleasesAndQuarantinesUntilNeutral() {
-    for (int lossCase = 0; lossCase < 4; ++lossCase) {
+    for (int lossCase = 0; lossCase < 3; ++lossCase) {
         ControllerWebInputPolicy policy;
         ArmNeutral(policy);
         ControllerWebInputSample sample = Eligible();
@@ -380,15 +405,12 @@ void TestGateLossReleasesAndQuarantinesUntilNeutral() {
         (void)policy.Update(sample);
         switch (lossCase) {
         case 0:
-            sample.leftShoulderHeld = false;
-            break;
-        case 1:
             sample.airborneProven = false;
             break;
-        case 2:
+        case 1:
             sample.runtimeReady = false;
             break;
-        case 3:
+        case 2:
             sample.nativeSwingAvailable = false;
             break;
         default:
@@ -571,7 +593,6 @@ void RequirePolicyInvariants(const ControllerWebInputPolicy& policy,
     }
     const bool validGate = sample.connected && sample.focused &&
                            sample.runtimeReady && sample.airborneProven &&
-                           sample.leftShoulderHeld &&
                            sample.nativeSwingAvailable &&
                            std::isfinite(sample.leftTrigger) &&
                            std::isfinite(sample.rightTrigger);
@@ -582,7 +603,7 @@ void RequirePolicyInvariants(const ControllerWebInputPolicy& policy,
     } else {
         Require(decision.layerActive && decision.consumeLeftTrigger &&
                     decision.consumeRightTrigger,
-                "valid L1 layer did not reserve both triggers");
+                "valid airborne mode did not reserve both triggers");
     }
 }
 
@@ -596,7 +617,7 @@ void TestExhaustiveShortSequenceInvariants() {
     alphabet[3].leftTrigger = 0.8;
     alphabet[3].rightTrigger = 0.8;
     alphabet[4].leftTrigger = 0.4;
-    alphabet[5].leftShoulderHeld = false;
+    alphabet[5].airborneProven = false;
     alphabet[5].leftTrigger = 0.8;
     alphabet[6].airborneProven = false;
     alphabet[6].rightTrigger = 0.8;
@@ -649,15 +670,15 @@ void TestExhaustiveShortSequenceInvariants() {
 int main() {
     const std::vector<std::pair<const char*, void (*)()>> tests{
         {"Schmitt thresholds and jitter", TestSchmittThresholdsAndJitter},
-        {"fresh edge after startup and gate",
-         TestFreshEdgeRequiredAfterStartupAndGateEntry},
+        {"fresh edge after startup and airborne entry",
+         TestFreshEdgeRequiredAfterStartupAndAirborneEntry},
         {"exact L2/R2 side mapping", TestExactLeftAndRightMapping},
         {"non-gated input remains vanilla",
          TestGroundAndNonGatedInputRemainVanilla},
-        {"airborne L1 layer reserves both triggers",
-         TestAirborneShoulderLayerAlwaysReservesBothTriggers},
-        {"normalized native trigger bridge",
-         TestNormalizedNativeTriggerBridge},
+        {"airborne mode reserves both triggers",
+         TestAirborneModeAlwaysReservesBothTriggers},
+        {"controller remap and native trigger bridge",
+         TestControllerRemapAndNativeTriggerBridge},
         {"first trigger owns both orders",
          TestFirstTriggerOwnsSingleRopeBothOrders},
         {"simultaneous press fails closed",

@@ -69,3 +69,11 @@ included here because its Nexus page does not grant modification or reupload
 permission and the public source snapshot contains no explicit license file.
 
 This companion's source is licensed under this repository's GPL-3.0 license.
+
+## Included controller layout
+
+- Airborne `L2/LT` directly requests a left-side swing.
+- Airborne `R2/RT` directly requests a right-side swing.
+- `L1/LB` performs the former native `L2/LT` zoom action.
+- Native `L1/LB + R1/RB` gameplay chords take priority over zoom.
+- No shoulder-button hold is required for either swing.

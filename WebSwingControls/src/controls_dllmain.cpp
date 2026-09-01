@@ -20,7 +20,7 @@ namespace {
         std::filesystem::path(executablePath).parent_path();
     return trueswing::rebuild::runtime::Logger::Initialize(
         gameDirectory / "WebSwingControls", "WebSwingControls.log",
-        "WebSwingControls 0.2.1-controller-fix controls-only session");
+        "WebSwingControls 0.3.0-rc2 direct-trigger controls-only session");
 }
 
 } // namespace
@@ -36,7 +36,7 @@ extern "C" __declspec(dllexport) DWORD WINAPI TrueSwingInitialize(void*) {
         return 0;
     }
     Logger::Write(
-        "WebSwingControls initialized: 0.2.1-controller-fix; mouse and normalized-controller input feed native Swing with character-local anchor selection; no custom physics.");
+        "WebSwingControls initialized: 0.3.0-rc2; L2/LT and R2/RT feed left/right native Swing, L1/LB feeds native zoom, L1/LB+R1/RB keeps native chord priority, mouse controls unchanged; no custom physics.");
     return 1;
 }
 
