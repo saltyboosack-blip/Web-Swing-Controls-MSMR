@@ -20,6 +20,7 @@ struct WebInputEligibility final {
     bool foreground{};
     bool runtimeReady{};
     bool airborneProven{};
+    bool nativeLeftActionChordHeld{};
 };
 
 struct WebInputDecision final {
@@ -36,7 +37,8 @@ struct WebInputDecision final {
 // when every gameplay gate is valid. Once a down is captured, its matching up
 // is always consumed so a synthetic/native Swing hold cannot stick or leak an
 // unmatched mouse edge. One native rope exists, so the first held mouse button
-// owns it; a second simultaneous button is swallowed until released.
+// owns it. Native attack input keeps priority when Space is held, and LMB stays
+// available for Swing Kick while an RMB-owned web is active.
 class AirborneWebInputPolicy final {
 public:
     [[nodiscard]] WebInputDecision Update(
@@ -97,6 +99,12 @@ private:
             WebInputDecision duplicate{};
             duplicate.consume = true;
             return duplicate;
+        }
+
+        if (side == WebSide::Left &&
+            (eligibility.nativeLeftActionChordHeld ||
+             rightOwnsNativeHold_)) {
+            return {};
         }
 
         const bool hadAny = leftOwnsNativeHold_ || rightOwnsNativeHold_;

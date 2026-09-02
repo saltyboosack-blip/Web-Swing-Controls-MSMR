@@ -76,6 +76,39 @@ void TestRightButtonOwnsRightWeb() {
             "RMB release did not release its native web");
 }
 
+void TestSpaceLeftClickRemainsNative() {
+    AirborneWebInputPolicy policy;
+    WebInputEligibility gate = Eligible();
+    gate.nativeLeftActionChordHeld = true;
+    const auto down =
+        policy.Update(MouseButtonTransition::LeftDown, gate);
+    const auto up = policy.Update(MouseButtonTransition::LeftUp, {});
+    Require(!down.consume && !down.leftAttach && !down.nativeSwingPress,
+            "Space+LMB was captured instead of reaching Ground Strike");
+    Require(!up.consume,
+            "uncaptured Ground Strike LMB release was consumed");
+}
+
+void TestLeftClickRemainsNativeDuringRightWeb() {
+    AirborneWebInputPolicy policy;
+    const auto right =
+        policy.Update(MouseButtonTransition::RightDown, Eligible());
+    const auto left =
+        policy.Update(MouseButtonTransition::LeftDown, Eligible());
+    const auto leftUp =
+        policy.Update(MouseButtonTransition::LeftUp, Eligible());
+    const auto rightUp =
+        policy.Update(MouseButtonTransition::RightUp, Eligible());
+    Require(right.rightAttach && right.nativeSwingPress,
+            "RMB did not own the rope");
+    Require(!left.consume && !left.leftAttach && !left.nativeSwingPress,
+            "LMB was captured instead of reaching Swing Kick");
+    Require(!leftUp.consume && !leftUp.nativeSwingRelease,
+            "native Swing Kick LMB release was consumed");
+    Require(rightUp.consume && rightUp.nativeSwingRelease,
+            "RMB release did not drop its rope");
+}
+
 void TestFirstButtonKeepsSingleRope() {
     AirborneWebInputPolicy policy;
     const auto left =
@@ -173,6 +206,9 @@ int main() {
         {"ground clicks remain vanilla", TestGroundClicksRemainVanilla},
         {"LMB owns left web", TestLeftButtonOwnsLeftWeb},
         {"RMB owns right web", TestRightButtonOwnsRightWeb},
+        {"Space+LMB remains native", TestSpaceLeftClickRemainsNative},
+        {"LMB remains native during right web",
+         TestLeftClickRemainsNativeDuringRightWeb},
         {"first button keeps single rope", TestFirstButtonKeepsSingleRope},
         {"captured release survives gate loss",
          TestCapturedReleaseSurvivesGateLoss},

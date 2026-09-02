@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.3.1
+
+- Preserved native Space + LMB Ground Strike input while airborne.
+- Preserved native LMB Swing Kick input during an RMB-owned swing.
+- Kept ordinary airborne LMB/RMB side selection and controller behavior
+  unchanged.
+- Documented that a held LMB cannot simultaneously act as both the left-web
+  owner and a separate Swing Kick press.
+
 ## 0.3.0-rc2
 
 - Preserved native L1/LB + R1/RB gameplay chords, including environmental

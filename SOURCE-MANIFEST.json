@@ -1,15 +1,110 @@
 {
   "schemaVersion": 1,
   "modPage": "https://www.nexusmods.com/marvelsspidermanremastered/mods/6306",
-  "version": "0.2.1-beta",
-  "workingZipSha256": "C3110C70995EE132F644E7A2AF7BECD68B5CB4F578120B55A653065FA9BD37C4",
-  "controlsDllSha256": "1E0AC0AE9FA82B59F06B5CBCD2A915FECA8FAEEBD924A1306A5471810CE0EBC8",
+  "version": "0.3.1",
+  "workingZipSha256": "A8DC54479AE8F5229EC13CBC4174800B142058127D508129375930F9AF649F71",
+  "controlsDllSha256": "13FDC9DB1B6DACDA90E369B88B45B04DCDB1AF2F5714B9FD76AEDB4D9FF8EBBA",
   "proxyDllSha256": "FFB6AD902798D7DF87F6D3FDE3B5A4BAE1E9212A40971B346452A5064768E111",
   "files": [
     {
+      "path": ".gitignore",
+      "sha256": "F7346271366D0AE0A1017D4984283B158FC09122585B2F7917491936B5B78450",
+      "bytes": 210
+    },
+    {
+      "path": "CHANGELOG.md",
+      "sha256": "25FC85043FDC29E5CC2F7337F75F35E93A746B0F573393831A15116D2BFC6670",
+      "bytes": 2777
+    },
+    {
+      "path": "LICENSE",
+      "sha256": "3972DC9744F6499F0F9B2DBF76696F2AE7AD8AF9B23DDE66D6AF86C9DFB36986",
+      "bytes": 35149
+    },
+    {
       "path": "README.md",
-      "sha256": "2CC91FFF5CB2BA78D8D9A817E714CDECC3004735FFB1598707896EC398A73634",
-      "bytes": 4683
+      "sha256": "7F48CF074F67864D20A928BB14811FB0FFD52DDCEE42F6120988F7D66DA4D06D",
+      "bytes": 7092
+    },
+    {
+      "path": "SECURITY.md",
+      "sha256": "D97ECBCA1FD76472F9ECF09E413165A528F02CF331CAE91535F147401B9B290E",
+      "bytes": 955
+    },
+    {
+      "path": "SMPCToolCompanion\\README.md",
+      "sha256": "665EE00C6E9F70E1A0542E080D628330CAE013DA87F60B5151CE416D035672CC",
+      "bytes": 3350
+    },
+    {
+      "path": "SMPCToolCompanion\\README_RELEASE.txt",
+      "sha256": "EF5D18D4A8100C2462987A61FA472FBBBC2B2684E9919172C6FB568AEF0831F7",
+      "bytes": 1811
+    },
+    {
+      "path": "SMPCToolCompanion\\THIRD_PARTY_NOTICES.md",
+      "sha256": "2B9D3B5E45D41C8DF6C079167B491D29155B818A3014885A69552208B920C23F",
+      "bytes": 496
+    },
+    {
+      "path": "SMPCToolCompanion\\build.ps1",
+      "sha256": "66E260187B701804828FB84A80672F24FDE66A6AC4F6535CFBE1A4D5E12A41A3",
+      "bytes": 4334
+    },
+    {
+      "path": "SMPCToolCompanion\\payload\\README.md",
+      "sha256": "032BE5D84C3E0F8ED6BD5D9A156FE2A3B0A0CF2F5D6D97872AC43839BE3B83FA",
+      "bytes": 561
+    },
+    {
+      "path": "SMPCToolCompanion\\src\\AssemblyInfo.cs",
+      "sha256": "2C1355F5FC4F4BB3071436196B42A7949F1471B0D36D1DDE1BEAD1211A3CC064",
+      "bytes": 515
+    },
+    {
+      "path": "SMPCToolCompanion\\src\\InstallerCore.cs",
+      "sha256": "5B7B3CBF457DFBB35A6D0BF3CA270CA52810FA61E457253C58761D04E132F4C6",
+      "bytes": 36006
+    },
+    {
+      "path": "SMPCToolCompanion\\src\\Program.cs",
+      "sha256": "F1FCC04D8DC7FB2D6723384E56D5E00107221F38E5B1EE7FF5FFC6B42DE61E05",
+      "bytes": 9726
+    },
+    {
+      "path": "SMPCToolCompanion\\tests\\InstallerCoreTests.cs",
+      "sha256": "2C62174B89CAD4087864F9C8EDF4362A7C2BDD3D7BC2D0EAD0D0A710429219BB",
+      "bytes": 16901
+    },
+    {
+      "path": "ScriptsProxy\\BUILDING.md",
+      "sha256": "7F29C51B9D7BCFDBCBD8E5AA0BBDE3C8180B1CBBEEB8B9CCA0F1063F22626DB7",
+      "bytes": 732
+    },
+    {
+      "path": "ScriptsProxy\\LICENSE.txt",
+      "sha256": "3972DC9744F6499F0F9B2DBF76696F2AE7AD8AF9B23DDE66D6AF86C9DFB36986",
+      "bytes": 35149
+    },
+    {
+      "path": "ScriptsProxy\\PATCH_NOTES.md",
+      "sha256": "2FC20F94655BC83974515D816809FD51F09B5334DFBBC82B41BDC0A1C2EFA1AF",
+      "bytes": 1762
+    },
+    {
+      "path": "ScriptsProxy\\README.md",
+      "sha256": "4B205307CC4BA8F5330AAEFDBA930A66640CB9413CC9F50A20ACDD67F2B13EAD",
+      "bytes": 1061
+    },
+    {
+      "path": "ScriptsProxy\\ScriptsProxy.vcxproj",
+      "sha256": "3806DDFBF01BAFD78DD434BD2D20912EA95AE9478C90C518FCBC162163B568F8",
+      "bytes": 6423
+    },
+    {
+      "path": "ScriptsProxy\\ScriptsProxy.vcxproj.filters",
+      "sha256": "093FFB2AFE14DB3C918B0AA1858189D730410352427651E048395EC918208497",
+      "bytes": 2195
     },
     {
       "path": "ScriptsProxy\\build-host-gate-tests.cmd",
@@ -27,14 +122,9 @@
       "bytes": 371
     },
     {
-      "path": "ScriptsProxy\\BUILDING.md",
-      "sha256": "7F29C51B9D7BCFDBCBD8E5AA0BBDE3C8180B1CBBEEB8B9CCA0F1063F22626DB7",
-      "bytes": 732
-    },
-    {
       "path": "ScriptsProxy\\dllmain.cpp",
-      "sha256": "489184A04E83A61C88663363ACBBC36B60DE7B063CADB7E7B1B37BD149213EF7",
-      "bytes": 5060
+      "sha256": "06AEB29B7C3399595E2FD385AE8AD61BDA126EE7DCB1B72E8562B42232B7CA0B",
+      "bytes": 4888
     },
     {
       "path": "ScriptsProxy\\generate-winmm-forwarders.ps1",
@@ -43,13 +133,8 @@
     },
     {
       "path": "ScriptsProxy\\hooking.h",
-      "sha256": "898DC42246ED3A20698A4560956E6D919D22D14D8799B54903C099E9D576C87E",
-      "bytes": 1592
-    },
-    {
-      "path": "ScriptsProxy\\host_gate_tests.cpp",
-      "sha256": "38D419501859B40F4BC83C09268CE5D745D74B432E050EDD3735F931400FE737",
-      "bytes": 1266
+      "sha256": "FDAFC033849F641DEAA689277361BDFBFA72653F7938C8914DCAAA6222E997CB",
+      "bytes": 1534
     },
     {
       "path": "ScriptsProxy\\host_gate.cpp",
@@ -62,24 +147,19 @@
       "bytes": 204
     },
     {
-      "path": "ScriptsProxy\\LICENSE.txt",
-      "sha256": "230184F60BAE2FEAF244F10A8BAC053C8FF33A183BCC365B4D8B876D2B7F4809",
-      "bytes": 35823
+      "path": "ScriptsProxy\\host_gate_tests.cpp",
+      "sha256": "38D419501859B40F4BC83C09268CE5D745D74B432E050EDD3735F931400FE737",
+      "bytes": 1266
     },
     {
       "path": "ScriptsProxy\\logging.cpp",
-      "sha256": "24DD7833002000881D6B44D3FD9A8641B860B75FC6233834D16C92EA1FEF6ED1",
-      "bytes": 1150
+      "sha256": "73D70A24583D3E7CFB9AB9BFB09F3349EA5D22C7B83854F470939EFF5E073ABB",
+      "bytes": 1111
     },
     {
       "path": "ScriptsProxy\\logging.h",
-      "sha256": "5A38F7628FFE3A84FDD664A73C4BEDEF86FC04444E9C8D4A1083B385334505D4",
-      "bytes": 1145
-    },
-    {
-      "path": "ScriptsProxy\\PATCH_NOTES.md",
-      "sha256": "2FC20F94655BC83974515D816809FD51F09B5334DFBBC82B41BDC0A1C2EFA1AF",
-      "bytes": 1762
+      "sha256": "4AF653C6F00F6B5DF1389F23D8F9BB02727473B8EBBB5507431964BA498AF5BF",
+      "bytes": 1104
     },
     {
       "path": "ScriptsProxy\\proxy_helper_harness.cpp",
@@ -87,49 +167,34 @@
       "bytes": 3337
     },
     {
-      "path": "ScriptsProxy\\README.md",
-      "sha256": "B59CA86EC7262913394AA70EECDD2BC42627CC70C0FF03B789442237C79D0108",
-      "bytes": 1079
-    },
-    {
       "path": "ScriptsProxy\\scan.cpp",
-      "sha256": "62E4C9A8FD041E797D5B91F9B91C20F83BFE015736BEF9C72429DF0D39B74E60",
-      "bytes": 2407
+      "sha256": "83CC9D2F73B7C0C5D65044759B84E7413226C3F72CDC580269BD7116EAF00ABD",
+      "bytes": 2313
     },
     {
       "path": "ScriptsProxy\\scan.h",
-      "sha256": "6B9ADEF82F6F041D64A6A8ED5C7DCDAE677956DA536C83A7594046C8C3313AEE",
-      "bytes": 1339
-    },
-    {
-      "path": "ScriptsProxy\\ScriptsProxy.vcxproj",
-      "sha256": "75C3E2EE09A9C7470D06B72F0F0A7C9B95723B9E29F95985014EEBF48085775E",
-      "bytes": 6529
-    },
-    {
-      "path": "ScriptsProxy\\ScriptsProxy.vcxproj.filters",
-      "sha256": "1977A9DE7DAE98F2D86ED0F0D7692B4C76E5BF1632D58A93368DB31692D13AE5",
-      "bytes": 2243
+      "sha256": "01C10EF25DED4B6428F826F8010C62C0A6D3E19763893BAC4DA885CCBC37E34E",
+      "bytes": 1286
     },
     {
       "path": "ScriptsProxy\\utils.cpp",
-      "sha256": "0AFC5BF195F9B58CD2F0572EDDD23DA1AC7D2D33146AF4480537D60517CFD910",
-      "bytes": 1503
+      "sha256": "5BA745521C1B835DC3E24CCC9DF86AF0DC79487108D2AC1A1D348A93EBDF27CB",
+      "bytes": 1454
     },
     {
       "path": "ScriptsProxy\\utils.h",
-      "sha256": "80CCDA64ECB9BE663B08D57FF6144C4079A8EEA8B3831F5B73B8185609FFEC5A",
-      "bytes": 623
+      "sha256": "4298DA332E99B2B3A9AC9098688ECB3090820DE85AA99F77A3CF3FF437B096C6",
+      "bytes": 607
     },
     {
       "path": "ScriptsProxy\\vcpkg-configuration.json",
-      "sha256": "4FA81BED38722365B74A851F4300D10CC531F00FF80C848460A172A00DC0DD86",
-      "bytes": 362
+      "sha256": "F1AF22F3001A4629AA3CA02B0CC7023FD5D74BA7FB509FC68B2AF041ED017350",
+      "bytes": 348
     },
     {
       "path": "ScriptsProxy\\vcpkg.json",
-      "sha256": "6863A7CF8D74E9C7979E5291CB6AB6709B3BD1A0B58FF11DCE2D4D95B7CF5612",
-      "bytes": 65
+      "sha256": "68E782BB20416CACCB60E3381A2FD4272D86952F9E0CC779C722AAF61789EA6F",
+      "bytes": 59
     },
     {
       "path": "ScriptsProxy\\verify-proxy.ps1",
@@ -137,19 +202,14 @@
       "bytes": 9560
     },
     {
-      "path": "ScriptsProxy\\winmm_forwarders.asm",
-      "sha256": "06618AE5BF7374CC8AB834BCB5CE24777B51196CFD228B78134B0FA1FAE25CEB",
-      "bytes": 21102
-    },
-    {
       "path": "ScriptsProxy\\winmm.cpp",
-      "sha256": "2ECE5B0189E5DCC135A7228FAA3D466D3CA1FA415CEB9DC3D34016227DD2C5D4",
-      "bytes": 4787
+      "sha256": "3CB49F5017D10F80A4F06FB4C00AD081BE1A61F7F92EF0D96C2C0C060EA762FC",
+      "bytes": 4608
     },
     {
       "path": "ScriptsProxy\\winmm.def",
-      "sha256": "D42654EB452839347DA885AB2FC89E22858300E8C47AD58E7CA61AA46F84E41B",
-      "bytes": 7072
+      "sha256": "030E013B375D2E7EC13D793FFE96E2738C3999673134B7422D740D1F5ADD7527",
+      "bytes": 6890
     },
     {
       "path": "ScriptsProxy\\winmm.h",
@@ -157,8 +217,13 @@
       "bytes": 846
     },
     {
+      "path": "ScriptsProxy\\winmm_forwarders.asm",
+      "sha256": "8EF2DE6E5C642A878B3D4F83021B1119D96E3EF084948BFEF8F54A31982B706E",
+      "bytes": 20196
+    },
+    {
       "path": "WebSwingControls\\CMakeLists.txt",
-      "sha256": "C42D99E7178772B41FDA7BBC9315E94ED82347543DE98F86FDCDBF3E54851A95",
+      "sha256": "6C76402A320D8E7EFFFF4A0361D17ECB99950BC2129419263DC02C3410FC9DA2",
       "bytes": 1810
     },
     {
@@ -168,8 +233,8 @@
     },
     {
       "path": "WebSwingControls\\src\\AirborneWebInputPolicy.h",
-      "sha256": "383D0B301C1E0BBD1E408935819A7BC06156CAFE308F96B9042C5989A0F463C4",
-      "bytes": 5017
+      "sha256": "6FEEECA540C8F7DD5BAFEC779DD0C1AC4F08A6B43A1D87933991568DC035EA49",
+      "bytes": 5291
     },
     {
       "path": "WebSwingControls\\src\\ControllerSourceRoute.h",
@@ -178,18 +243,13 @@
     },
     {
       "path": "WebSwingControls\\src\\ControllerTriggerBridge.h",
-      "sha256": "CFA4433C743CEE8C752B476E93AC1C5C63B82D1BEE38BC9297F1B5D55C057D1B",
-      "bytes": 945
+      "sha256": "33201EDDC33E1E2F5D90FA2486A65DE1282FBEEAED80D6A5733A40C36DB7369B",
+      "bytes": 1438
     },
     {
       "path": "WebSwingControls\\src\\ControllerWebInputPolicy.h",
-      "sha256": "0CB2EE07310003FB2C57421BBB473737BDAFD337DC62E0F717584342DDB822D1",
-      "bytes": 10113
-    },
-    {
-      "path": "WebSwingControls\\src\\controls_dllmain.cpp",
-      "sha256": "5206498052B4A100EA97371CA4AD597A94E62F2CCE228650EA32BF0E2B3BCE70",
-      "bytes": 1821
+      "sha256": "09305254E5C7816EE5005B6EB84F80C68B3329C39CF589292FFBC6AA2B0566A0",
+      "bytes": 10066
     },
     {
       "path": "WebSwingControls\\src\\ControlsOnlyRuntime.cpp",
@@ -223,8 +283,8 @@
     },
     {
       "path": "WebSwingControls\\src\\ManualWebRuntime.cpp",
-      "sha256": "379F81805B2127E24EC865393C0AA9D53ECA8E2798D057564C033DAA2F2E6520",
-      "bytes": 88386
+      "sha256": "33D61640AB45D2B75FEF2D8F4CA14521C3946858A4655B9C52BAE525150A1135",
+      "bytes": 90887
     },
     {
       "path": "WebSwingControls\\src\\ManualWebRuntime.h",
@@ -262,19 +322,24 @@
       "bytes": 4670
     },
     {
+      "path": "WebSwingControls\\src\\controls_dllmain.cpp",
+      "sha256": "4B1D68E2CF968CA0C13F24FB84F9DD9D42C81E80A53E99F1E01A8AD1FA9A1F2E",
+      "bytes": 1914
+    },
+    {
       "path": "WebSwingControls\\tests\\ControllerSourceRouteTests.cpp",
-      "sha256": "46E843D952DC1745D9E785D45B54E36EE1996320F15CA6648461C4DE76FF303F",
-      "bytes": 8602
+      "sha256": "59EC1468E29490E6E351C797D1EF061580EAFC96585DEBBAC8674DD1AC9A2E52",
+      "bytes": 8564
     },
     {
       "path": "WebSwingControls\\tests\\ControllerWebInputPolicyTests.cpp",
-      "sha256": "01589F2CEFE4D4D10B76723163DE0148E9EC8598FEE77EA78D4F8A07F7DF0947",
-      "bytes": 28175
+      "sha256": "0B9268709BF76F93EB90D08F01B547487BDE97316A6C6B80673C8E4739A91FB3",
+      "bytes": 29529
     },
     {
       "path": "WebSwingControls\\tests\\ControlsOnlyPolicyTests.cpp",
-      "sha256": "0769D25D7436B25FD6CB932EAA9FBB8F3498D07D4FD99FFAA13D5FC46D9B68ED",
-      "bytes": 8082
+      "sha256": "DAC50B08931435D6A7FCD946FC966A495C88054FBD1DF61852400DAAA2006561",
+      "bytes": 9723
     },
     {
       "path": "WebSwingControls\\tests\\ManualWebPolicyTests.cpp",
@@ -283,308 +348,118 @@
     },
     {
       "path": "WebSwingControls\\third_party\\minhook\\.editorconfig",
-      "sha256": "B4F2BF03993483823327466BEC0B90563CE9BAACED65423AB17439761D081C5A",
-      "bytes": 517
+      "sha256": "476D7121856A09DA8428A459ABF64A546FE3EC46313555C8534C538FB5BE3BA8",
+      "bytes": 491
     },
     {
       "path": "WebSwingControls\\third_party\\minhook\\.github\\workflows\\msbuild.yml",
-      "sha256": "B06D397CB587565A7BC2755D84703D758E14D2DC2ADA8CC0DBB6E9DFD42C3339",
-      "bytes": 2189
+      "sha256": "5AB6103AFA6B4C902F1911A7DAA85231A6746431095DC4A212ABFA2182490EC7",
+      "bytes": 2130
     },
     {
       "path": "WebSwingControls\\third_party\\minhook\\.gitignore",
-      "sha256": "8F44D8438C40829DB695DE58B984DAC1C080C8B96E5CA40754EC0F39F952BFAC",
-      "bytes": 404
+      "sha256": "6CDC5E29485B58ABFF4BD0BFE10A851108802A4AD72C8E52A732AC7E4CE4E35C",
+      "bytes": 360
     },
     {
       "path": "WebSwingControls\\third_party\\minhook\\AUTHORS.txt",
-      "sha256": "264E92BDF94BF3AF4606E05EA725C761C4B362577A5423CF88241EB9C771E5D3",
-      "bytes": 222
-    },
-    {
-      "path": "WebSwingControls\\third_party\\minhook\\build\\MinGW\\make.bat",
-      "sha256": "A8142CAB33967B5155D72F77332D32AA6442B57938E5BA43EBEBFA25DD0C412B",
-      "bytes": 319
-    },
-    {
-      "path": "WebSwingControls\\third_party\\minhook\\build\\MinGW\\make.sh",
-      "sha256": "1B14115056223F79FD66B1106B5A8284707B016CAE4600720F381CB682393E9F",
-      "bytes": 323
-    },
-    {
-      "path": "WebSwingControls\\third_party\\minhook\\build\\MinGW\\Makefile",
-      "sha256": "E831F95F574F9E5001C85514E70F1DF774297A2EFE3E90114B8412A38FF67482",
-      "bytes": 968
-    },
-    {
-      "path": "WebSwingControls\\third_party\\minhook\\build\\VC10\\libMinHook.vcxproj",
-      "sha256": "0C6CAEFFD48189E481FDD02E4BEC72EC5DA55F5FECA814912D601EC20FE3C953",
-      "bytes": 9682
-    },
-    {
-      "path": "WebSwingControls\\third_party\\minhook\\build\\VC10\\libMinHook.vcxproj.filters",
-      "sha256": "5024D4C3D40C990B227934DB9B379BA33809B520E92C4F1C02881EEFD9E25721",
-      "bytes": 1867
-    },
-    {
-      "path": "WebSwingControls\\third_party\\minhook\\build\\VC10\\MinHook.vcxproj",
-      "sha256": "264BA984171C74512D044E42C1C5E822A031E66B3B16BA8D2BC39C1563A7FECE",
-      "bytes": 10583
-    },
-    {
-      "path": "WebSwingControls\\third_party\\minhook\\build\\VC10\\MinHookVC10.sln",
-      "sha256": "99A590D9C890B0C4F563BF5D22613F3CF9C8D4992E5DE065709E0B7143067D7A",
-      "bytes": 2147
-    },
-    {
-      "path": "WebSwingControls\\third_party\\minhook\\build\\VC11\\libMinHook.vcxproj",
-      "sha256": "DC868B5FEDD051CA4773B3956DE1C9BF01F2D976D8A76B73372EA854B06F96C2",
-      "bytes": 9888
-    },
-    {
-      "path": "WebSwingControls\\third_party\\minhook\\build\\VC11\\libMinHook.vcxproj.filters",
-      "sha256": "5024D4C3D40C990B227934DB9B379BA33809B520E92C4F1C02881EEFD9E25721",
-      "bytes": 1867
-    },
-    {
-      "path": "WebSwingControls\\third_party\\minhook\\build\\VC11\\MinHook.vcxproj",
-      "sha256": "C79F28D55635E754E2E3CD4A76ECBE1BE3ADE062972B7B02CD1F05B8F248DA5A",
-      "bytes": 10759
-    },
-    {
-      "path": "WebSwingControls\\third_party\\minhook\\build\\VC11\\MinHookVC11.sln",
-      "sha256": "6179DA0D6550C19E9ECEB5CBBD9F944C9462948E5ABE246FE62B7D6F764FEF99",
-      "bytes": 2147
-    },
-    {
-      "path": "WebSwingControls\\third_party\\minhook\\build\\VC12\\libMinHook.vcxproj",
-      "sha256": "A8AB007F742286D126570819E8C0C09D5135E52A29EEFBF84502B8940666FB1C",
-      "bytes": 9964
-    },
-    {
-      "path": "WebSwingControls\\third_party\\minhook\\build\\VC12\\libMinHook.vcxproj.filters",
-      "sha256": "5024D4C3D40C990B227934DB9B379BA33809B520E92C4F1C02881EEFD9E25721",
-      "bytes": 1867
-    },
-    {
-      "path": "WebSwingControls\\third_party\\minhook\\build\\VC12\\MinHook.vcxproj",
-      "sha256": "D7FC2D546DFB14D124C4BB8BD3862C891D1BB460E37F3099507DB0F055C28831",
-      "bytes": 10760
-    },
-    {
-      "path": "WebSwingControls\\third_party\\minhook\\build\\VC12\\MinHookVC12.sln",
-      "sha256": "1CE4CD7448CB08DA982B25A4D759A6AF306C77E4429BE763EB8BA068F9DBA590",
-      "bytes": 2226
-    },
-    {
-      "path": "WebSwingControls\\third_party\\minhook\\build\\VC14\\libMinHook.vcxproj",
-      "sha256": "ADE6DD597AE56583C54901CDA3167235BFBF9D7F35B351FE4BBEE5BA0BEE11CC",
-      "bytes": 9964
-    },
-    {
-      "path": "WebSwingControls\\third_party\\minhook\\build\\VC14\\libMinHook.vcxproj.filters",
-      "sha256": "5024D4C3D40C990B227934DB9B379BA33809B520E92C4F1C02881EEFD9E25721",
-      "bytes": 1867
-    },
-    {
-      "path": "WebSwingControls\\third_party\\minhook\\build\\VC14\\MinHook.vcxproj",
-      "sha256": "C2BE5999813CF1AB692591073465D4F972A0D95E71CD53E431A6544D4D95058F",
-      "bytes": 10760
-    },
-    {
-      "path": "WebSwingControls\\third_party\\minhook\\build\\VC14\\MinHookVC14.sln",
-      "sha256": "CA9398F1A028660BD449E1277FD7500556F6C2C2B302039FF71F76E0484012C5",
-      "bytes": 2224
-    },
-    {
-      "path": "WebSwingControls\\third_party\\minhook\\build\\VC15\\libMinHook.vcxproj",
-      "sha256": "A6AAC3E0222AFAE9D9088104C72B7381152A1525856632259213EB779DA95BCD",
-      "bytes": 9966
-    },
-    {
-      "path": "WebSwingControls\\third_party\\minhook\\build\\VC15\\libMinHook.vcxproj.filters",
-      "sha256": "5024D4C3D40C990B227934DB9B379BA33809B520E92C4F1C02881EEFD9E25721",
-      "bytes": 1867
-    },
-    {
-      "path": "WebSwingControls\\third_party\\minhook\\build\\VC15\\MinHook.vcxproj",
-      "sha256": "789A7DDC4D56F1A3716400D929BCEA2B645126256F23EDA060ECD75BFD44A3C9",
-      "bytes": 10762
-    },
-    {
-      "path": "WebSwingControls\\third_party\\minhook\\build\\VC15\\MinHookVC15.sln",
-      "sha256": "6FBBFFD5D9B0EF270080EFE6E9D6B5327F7760E0E973E08F83519944EF32B45D",
-      "bytes": 2224
-    },
-    {
-      "path": "WebSwingControls\\third_party\\minhook\\build\\VC16\\libMinHook.vcxproj",
-      "sha256": "9D0CDB7AC1D9CF5D5EA39B4C9704AEE4F245E7B7D2672F2948FA8B6244326930",
-      "bytes": 9952
-    },
-    {
-      "path": "WebSwingControls\\third_party\\minhook\\build\\VC16\\libMinHook.vcxproj.filters",
-      "sha256": "5024D4C3D40C990B227934DB9B379BA33809B520E92C4F1C02881EEFD9E25721",
-      "bytes": 1867
-    },
-    {
-      "path": "WebSwingControls\\third_party\\minhook\\build\\VC16\\MinHook.vcxproj",
-      "sha256": "EA0F0FC9C3F256F0A735D6BD24C662FE99F194B81D4BA2FFC46E16919798243B",
-      "bytes": 10750
-    },
-    {
-      "path": "WebSwingControls\\third_party\\minhook\\build\\VC16\\MinHookVC16.sln",
-      "sha256": "61CF4CFA526CF2B440E89F07B426F8FDF870A7F244DC88E7BD8A17F689E8DE7C",
-      "bytes": 2234
-    },
-    {
-      "path": "WebSwingControls\\third_party\\minhook\\build\\VC17\\libMinHook.vcxproj",
-      "sha256": "18326280BB6A55E535A681BA8B7B025D7EDD2BE3E932A9ADECBA33AAB646FF93",
-      "bytes": 10023
-    },
-    {
-      "path": "WebSwingControls\\third_party\\minhook\\build\\VC17\\libMinHook.vcxproj.filters",
-      "sha256": "5024D4C3D40C990B227934DB9B379BA33809B520E92C4F1C02881EEFD9E25721",
-      "bytes": 1867
-    },
-    {
-      "path": "WebSwingControls\\third_party\\minhook\\build\\VC17\\MinHook.vcxproj",
-      "sha256": "45B7742B3ACE3FED0CC9FA5C4BF334364FF6C262863DDA3353EF4AABB59F0521",
-      "bytes": 10819
-    },
-    {
-      "path": "WebSwingControls\\third_party\\minhook\\build\\VC17\\MinHookVC17.sln",
-      "sha256": "D1F64C24B61DC0726FD7137DF04C5C98B9F761E6D67E951E3F5B31C743D3DE4A",
-      "bytes": 2234
-    },
-    {
-      "path": "WebSwingControls\\third_party\\minhook\\build\\VC18\\libMinHook.vcxproj",
-      "sha256": "C99DC6AA58EF780A1946AC50B684C50E0E8DBE123FE752C31EB5C459B5B5D4D3",
-      "bytes": 10023
-    },
-    {
-      "path": "WebSwingControls\\third_party\\minhook\\build\\VC18\\libMinHook.vcxproj.filters",
-      "sha256": "5024D4C3D40C990B227934DB9B379BA33809B520E92C4F1C02881EEFD9E25721",
-      "bytes": 1867
-    },
-    {
-      "path": "WebSwingControls\\third_party\\minhook\\build\\VC18\\MinHook.vcxproj",
-      "sha256": "7C53D1F671D0B6980FFC25B5836CC5FC2E24BEA014A3A81F231439458A263C6A",
-      "bytes": 10993
-    },
-    {
-      "path": "WebSwingControls\\third_party\\minhook\\build\\VC18\\MinHookVC18.slnx",
-      "sha256": "FBE7AC4AD5F50F7ED5DF699080E2301A8B1CACECD2A73570E29F61A8DB384B9E",
-      "bytes": 289
-    },
-    {
-      "path": "WebSwingControls\\third_party\\minhook\\build\\VC9\\libMinHook.vcproj",
-      "sha256": "7A72A41B75E841A62C11C0D3A981CA7E3D25E76BB39E133D36C03847D15BA15E",
-      "bytes": 8462
-    },
-    {
-      "path": "WebSwingControls\\third_party\\minhook\\build\\VC9\\MinHook.vcproj",
-      "sha256": "1DAFB77EE96A7ECC7600A0CB3ABA5FAACDEB3C2080E4B59293116CD280FA6B42",
-      "bytes": 7349
-    },
-    {
-      "path": "WebSwingControls\\third_party\\minhook\\build\\VC9\\MinHookVC9.sln",
-      "sha256": "0052369B9E3FDB7C22309DE304B19CAE98CC4C1C6FCA5E6087517CE2954EDC11",
-      "bytes": 2145
-    },
-    {
-      "path": "WebSwingControls\\third_party\\minhook\\cmake\\minhook-config.cmake.in",
-      "sha256": "3213AC21AD3415576CE5138FCF5A00DC2913179387252808573D91DCC4D5DD1D",
-      "bytes": 1924
+      "sha256": "073B4E8B0A5A0CD9F4DFA838369F4FC7A4F47151D930B4E1FD891644060A897F",
+      "bytes": 214
     },
     {
       "path": "WebSwingControls\\third_party\\minhook\\CMakeLists.txt",
-      "sha256": "A04559ECF74DEC745EF8C75F2B1D977E7E23BB6E08390035122511B382776A5D",
-      "bytes": 4351
-    },
-    {
-      "path": "WebSwingControls\\third_party\\minhook\\dll_resources\\MinHook.def",
-      "sha256": "C27F9BE30A81DDD55F6ECFA7AE3F6B7F7E2EF761E305A7B7217A09BFD10CD82E",
-      "bytes": 266
-    },
-    {
-      "path": "WebSwingControls\\third_party\\minhook\\dll_resources\\MinHook.rc",
-      "sha256": "7BF72847F2C3559D9F4DD45ECE24454E9352295D3F5BE457BAC364CBF1BD7012",
-      "bytes": 879
-    },
-    {
-      "path": "WebSwingControls\\third_party\\minhook\\include\\MinHook.h",
-      "sha256": "D5CF8DB333895134398C7F69BAC43F232835FDA1CCCBD86875C654CD69989B23",
-      "bytes": 7714
+      "sha256": "C6B531BB7D3B62149FEF9C3D9032E985DF287B6D02E3C2887DFA04AB39A09A07",
+      "bytes": 4210
     },
     {
       "path": "WebSwingControls\\third_party\\minhook\\LICENSE.txt",
-      "sha256": "4F21F857550D7BE854DA6EA5F2DA4E6775CA4E3FBB535E4F3D961C47D0BF3335",
-      "bytes": 4446
+      "sha256": "D5C2224982B0B95A16B098A561335FA93F3EAF4D0AA964B7843EDB986DF78DC8",
+      "bytes": 4365
     },
     {
       "path": "WebSwingControls\\third_party\\minhook\\README.md",
-      "sha256": "A53A4607B65F528C48332DD82117CDD7D4EDC7A9AFC74B6A25406784C0C05F8A",
-      "bytes": 4759
+      "sha256": "E26659120C32B46C391C83CFC8C50F733409AD687E3374B809A9AC609309886D",
+      "bytes": 4665
+    },
+    {
+      "path": "WebSwingControls\\third_party\\minhook\\cmake\\minhook-config.cmake.in",
+      "sha256": "38B043BC0A0FCB674CE92F48DDA16316E9F9C32F1C5D285043AD358901954F36",
+      "bytes": 1885
+    },
+    {
+      "path": "WebSwingControls\\third_party\\minhook\\dll_resources\\MinHook.def",
+      "sha256": "6F7C105459A8739899A78371A9E962A5B8979170E2A51C06534417E6A04198F6",
+      "bytes": 252
+    },
+    {
+      "path": "WebSwingControls\\third_party\\minhook\\dll_resources\\MinHook.rc",
+      "sha256": "A7483BE5936A264B7578118AA1F5AF97C61781BFB928A428145F2F02E8638878",
+      "bytes": 847
+    },
+    {
+      "path": "WebSwingControls\\third_party\\minhook\\include\\MinHook.h",
+      "sha256": "E34BBF7B855C842694F6E3DD78E2D280E99ED9732501E3DC1532A8626A8DB8E5",
+      "bytes": 7529
     },
     {
       "path": "WebSwingControls\\third_party\\minhook\\src\\buffer.c",
-      "sha256": "27D64B9E3C30FF8D894FB20A5B6353A4B77B40DBEA75690EC00A79440A4D85D7",
-      "bytes": 10133
+      "sha256": "6B63B0006B746294B54E5A381B9A311F0A20301E09BCF379A14730F178BCE384",
+      "bytes": 9821
     },
     {
       "path": "WebSwingControls\\third_party\\minhook\\src\\buffer.h",
-      "sha256": "175EC5496C020509CF4C7670322B51B5BCD5B63A345BFEFC4A19B43675857FA7",
-      "bytes": 1862
+      "sha256": "9769702BD625249E59A19EDE05C84365FCC7707E1FA0E5DF08DF42227CEE13E3",
+      "bytes": 1820
     },
     {
       "path": "WebSwingControls\\third_party\\minhook\\src\\hde\\hde32.c",
-      "sha256": "2D4D7DD73D609028822AAF71AC05112B83FE6CC2AE2D6D71FA051B3FC6ACFC43",
-      "bytes": 9642
+      "sha256": "5DA4941E9044F7B325C7F952B5840089E365F374740B7FE7318805D08C0D6C32",
+      "bytes": 9318
     },
     {
       "path": "WebSwingControls\\third_party\\minhook\\src\\hde\\hde32.h",
-      "sha256": "754579FBCEC5F64FA229646CEECB241C0B7F31C8A0BB12370E604C316C569315",
-      "bytes": 2555
+      "sha256": "5132DE5BE8AC7A9D054420F5CAEF0FB01437FAA892F03B3CDC77F795973BF15A",
+      "bytes": 2450
     },
     {
       "path": "WebSwingControls\\third_party\\minhook\\src\\hde\\hde64.c",
-      "sha256": "06B588A5140E15F0A55E13DDADC7E3A4648F3223CEFAB2D5285B796A422BB9F5",
-      "bytes": 9842
+      "sha256": "824EAFA315322E6DA105A7CE4EC1FC0E0ADEEE0106D32152FBB0B59E709BD15C",
+      "bytes": 9507
     },
     {
       "path": "WebSwingControls\\third_party\\minhook\\src\\hde\\hde64.h",
-      "sha256": "FD5B39E2865E12B9525EBDA8FD9E9658B341EAD5932D1BCB412A189F81CA42CA",
-      "bytes": 2714
+      "sha256": "E99AA4997BDA14B534C614C3D8CB78A72C4ACA91A1212C8B03EC605D1D75E36E",
+      "bytes": 2602
     },
     {
       "path": "WebSwingControls\\third_party\\minhook\\src\\hde\\pstdint.h",
-      "sha256": "975488009779EA99C7E04B83A160397D5CD7195CB5BF6AD79180805F756C7D00",
-      "bytes": 1701
+      "sha256": "604D1CDF45C5A95BC9CF1BBF39CA05EF83013541101D34971C5CD7577E3D5247",
+      "bytes": 1662
     },
     {
       "path": "WebSwingControls\\third_party\\minhook\\src\\hde\\table32.h",
-      "sha256": "E56F8641BD9133C1B99A1E6555B19EEBE7ED663E5EA8DE4EDBE74BA461161AB4",
-      "bytes": 3581
+      "sha256": "43BF687A9FFF071B5F46070DB4D36C846F8E069CDC57485EE897C499AACDDE23",
+      "bytes": 3508
     },
     {
       "path": "WebSwingControls\\third_party\\minhook\\src\\hde\\table64.h",
-      "sha256": "0B6C69AD498E67907E0C574AB06123AEE4EC30C99FA181099EA929A8D820BFC1",
-      "bytes": 3651
+      "sha256": "B774446D2F110CE954FB0A710F4693C5562DDBD8D56FE84106F2EE80DB8B50A2",
+      "bytes": 3577
     },
     {
       "path": "WebSwingControls\\third_party\\minhook\\src\\hook.c",
-      "sha256": "C6EEC4F8DC5FB6513347C3F44FBDB25CA0BBA7A2BCBE141D238C7DA97094CD9D",
-      "bytes": 27584
+      "sha256": "3060D3C42F03A2F11324CBEE95D853071757ED0FE4B1BC9EB5F0D8FC9E346A37",
+      "bytes": 26645
     },
     {
       "path": "WebSwingControls\\third_party\\minhook\\src\\trampoline.c",
-      "sha256": "58AE2DCC65317983535963654BB10A4398DAE4A90DA08AF1007AB1DCF0DB82A9",
-      "bytes": 11034
+      "sha256": "D837F8555681C3762468D712C43F2064ED31DEE610E0B02965FD8AA54B88172F",
+      "bytes": 10714
     },
     {
       "path": "WebSwingControls\\third_party\\minhook\\src\\trampoline.h",
-      "sha256": "C93C66F8DB04561F3345835F1185451F61043C1549E33425D87AF86448580379",
-      "bytes": 3900
+      "sha256": "27426751DDE36CDD8346469E61CDCCA47950B1056A69F21CC63F4B41743FAF6A",
+      "bytes": 3795
     }
   ]
 }

@@ -5,6 +5,10 @@ uses for an ordinary web swing.
 
 - Hold **left mouse** while airborne to request a valid left-side anchor.
 - Hold **right mouse** while airborne to request a valid right-side anchor.
+- Hold **Space**, then press **left mouse** while airborne to keep the game's
+  native Ground Strike input.
+- During a right-mouse swing, press **left mouse** to use the native Swing Kick.
+  A left-mouse swing cannot use that same held button as a second attack press.
 - On controller while airborne, use **L2/LT** for left or **R2/RT** for right.
   No shoulder-button hold is required. **L1/LB** performs the former native
   **L2/LT** zoom action. Native **L1/LB + R1/RB** gameplay chords take priority
@@ -117,12 +121,14 @@ For the proxy, follow `ScriptsProxy/BUILDING.md` and
 
 | Artifact | SHA-256 |
 | --- | --- |
+| Overstrike v0.3.1 script | `A8DC54479AE8F5229EC13CBC4174800B142058127D508129375930F9AF649F71` |
 | Overstrike v0.3.0 script | `68AB2F6D952DD2F299ED2BF8B8367AE5C9BAE800C95124DB7582EDA7A74BD845` |
 | Complete v0.2.1 ZIP | `C3110C70995EE132F644E7A2AF7BECD68B5CB4F578120B55A653065FA9BD37C4` |
 | SMPCTool Companion v1.0.0 ZIP | `DF16A8924AC3B346AEBD6F7672854400601B0C6A68690C13889A835ACEB574DB` |
 | SMPCTool Companion EXE | `0B4693731B83318C24E89D9851CE6FC1D35633BF0032203D5CD1F5A35137813F` |
 | Controls DLL | `1E0AC0AE9FA82B59F06B5CBCD2A915FECA8FAEEBD924A1306A5471810CE0EBC8` |
 | Controls DLL v0.3.0 RC2 | `10F25A79F541731BAF898F28316B4FBE444E96E07C6B47F46E49C55F9AB691FC` |
+| Controls DLL v0.3.1 | `13FDC9DB1B6DACDA90E369B88B45B04DCDB1AF2F5714B9FD76AEDB4D9FF8EBBA` |
 | Compatibility proxy | `FFB6AD902798D7DF87F6D3FDE3B5A4BAE1E9212A40971B346452A5064768E111` |
 
 Version 0.2.1 passed all seven native test executables. The user then
@@ -132,6 +138,9 @@ game on a PS5 controller.
 Version 0.3.0 RC2 passed all four current native test executables and was
 confirmed in game with direct L2/R2 swinging, L1 zoom, and native L1+R1 item
 pickup working together on a PS5 controller.
+
+Version 0.3.1 passed all four current native test executables. Ground Strike
+and Swing Kick input-priority fixes still require final gameplay confirmation.
 
 The standalone SMPCTool companion passed twelve installer fixture tests. It
 does not modify or redistribute SMPCTool and does not convert the native mod

@@ -118,6 +118,7 @@ constexpr std::uintptr_t kSteamInputGamepadVtableRva = 0x04F439A0;
 constexpr std::uintptr_t kXInputGamepadVtableRva = 0x04F44100;
 #endif
 constexpr std::uint32_t kLeftShiftScanCode = 0x2A;
+constexpr std::uint32_t kSpaceScanCode = 0x39;
 constexpr std::uint32_t kSwingUseToggleSettingId = 0x2D;
 constexpr std::size_t kActionRecordStride = 0x30;
 constexpr std::size_t kSwingActionRecordIndex = 5U;
@@ -386,6 +387,7 @@ ControllerSourceRoute g_controllerSourceRoute;
 #endif
 bool g_syntheticShiftDown = false;
 bool g_physicalShiftDown = false;
+bool g_physicalSpaceDown = false;
 bool g_nativeBridgeShiftDown = false;
 #if !defined(TRUESWING_CONTROLS_ONLY)
 std::array<QueuedSubmitEvidence, kQueuedSubmitEvidenceCapacity>
@@ -1051,6 +1053,9 @@ void LogControllerRoute(const NativeGamepadSample& gamepad,
         return result;
     }
     result.airborneProven = airborne != 0U;
+    result.nativeLeftActionChordHeld =
+        g_physicalSpaceDown ||
+        (GetAsyncKeyState(VK_SPACE) & static_cast<SHORT>(0x8000)) != 0;
     if (result.airborneProven && provenHero != nullptr) {
         *provenHero = snapshot;
     }
@@ -1207,12 +1212,18 @@ void CancelManualHold(std::uintptr_t input) noexcept {
     }
     g_syntheticShiftDown = false;
     g_physicalShiftDown = false;
+    g_physicalSpaceDown = false;
     ClearSideRequest();
 }
 
 [[nodiscard]] bool IsLeftShift(const RAWKEYBOARD& keyboard) noexcept {
     return (keyboard.MakeCode & 0x7FU) == kLeftShiftScanCode &&
            (keyboard.Flags & RI_KEY_E0) == 0U;
+}
+
+[[nodiscard]] bool IsSpace(const RAWKEYBOARD& keyboard) noexcept {
+    return (keyboard.MakeCode & 0x7FU) == kSpaceScanCode &&
+           (keyboard.Flags & (RI_KEY_E0 | RI_KEY_E1)) == 0U;
 }
 
 #if !defined(TRUESWING_CONTROLS_ONLY)
@@ -1857,6 +1868,13 @@ bool __fastcall HookInputDispatch(void* inputObject, std::uint32_t message,
                                        rawInputCopy);
     }
 #endif
+    if (local.header.dwType == RIM_TYPEKEYBOARD &&
+        IsSpace(local.data.keyboard)) {
+        g_physicalSpaceDown =
+            (local.data.keyboard.Flags & RI_KEY_BREAK) == 0U;
+        return g_originalInputDispatch(inputObject, message, wParam, lParam,
+                                       rawInputCopy);
+    }
     if (local.header.dwType == RIM_TYPEKEYBOARD &&
         IsLeftShift(local.data.keyboard)) {
         const bool down =
